@@ -37,6 +37,7 @@ async function login(req, res, next) {
             // give some permissions
             const token = jwt.sign({
                 id: user.id,
+                email: user.email,
                 permissions: {
                     view: true,
                     update: true,
