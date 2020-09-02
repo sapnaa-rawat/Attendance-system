@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-
+const resources = require("../model/resource");
 
 
 
@@ -8,8 +8,8 @@ var transporter = nodemailer.createTransport({
     host: "smtp-relay.gmail.com",
     port: 465,
     auth: {
-      user: "",
-      pass: "",
+      user: "noreplymailed2020@gmail.com",
+      pass: "noReply@12345",
     },
     secure: true,
   });
@@ -18,27 +18,33 @@ var transporter = nodemailer.createTransport({
 exports.forgot_Password = (req, res) => {
     var email = req.body.email;
 
-    con.query(sql, email, (err, result) => {
-      if (err || result.length == 0) {
-        response.onError(res, Constants.Strings.Forget_mail, 402, err || "No result");
-      } else {
+    resources.findOne(email, (err, result) => {
+      if (err) {
+          return res.send(402, err);
+      } else if(result.length == 0){
+        return res.send(402, {msg : "No result"});
+      }
+      else {
         var password = Math.random().toString(36).slice(-6);
-        var name = result[0].first_name;
+        var name = result.name;
 
-        let sql = "update user set password=? where email=? ";
-        con.query(sql, [md5(password), email], (err, result) => {
+        resources.findByIdAndUpdate(result.id, {$set : {"password" : password}}, (err, result) => {
           if (err) {
-            response.onError(res, Constants.Strings.ERROR, 402, err);
-          } else {
+            return res.send(402, err);
+        } else {
             const message = {
-              from: , // Sender address
+              from: "noreplymailed2020@gmail.com", // Sender address
               to: email, // List of recipients
               subject: "Reset password", // Subject line
-              html: `Hi {name},<br><br> Here is the new password- <b>{password}</b><br><br> If password reset wasn’t intended: If you didn't make the request, just ignore this email.<br><br>For security, this password expires after a day.<br><br> Thanks <br><br>`, // Plain text body
+              html: `Hi {name},<br><br> 
+                    Here is the new password- <b>{password}</b><br><br> 
+                    If password reset wasn’t intended: If you didn't make the request,
+                    just ignore this email.<br><br>
+                    Thanks <br><br>`, // Plain text body
             };
             transporter.sendMail(message, function (err, info) {
             });
-
+            res.send(200, {msg : "password mail send"});
           }
         });
       }
