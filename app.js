@@ -3,11 +3,24 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose=require('mongoose');
+var helmet=require('helmet');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+app.use(helmet());
+
+//mongo db server connection
+
+mongoose.connect('mongodb://localhost/basicProject',{ useNewUrlParser: true ,useUnifiedTopology: true , useFindAndModify : false});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("connection established");
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
