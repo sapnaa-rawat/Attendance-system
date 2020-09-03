@@ -1,9 +1,7 @@
 var express = require('express');
+const missingdate = require('../modules/missingdate');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/missing',missingdate.missing);
 
 module.exports = router;
