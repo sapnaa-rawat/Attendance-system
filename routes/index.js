@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var checkAttendance=require("../modules/check")
 var loginHandler = require('../modules/logIn');
-router.post('/dailycheck',checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
+router.post('/dailycheck',loginHandler.validate,checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
 
 const forget_password = require("../modules/forget_password");
 var Attendance=require("../modules/attendance-record")
