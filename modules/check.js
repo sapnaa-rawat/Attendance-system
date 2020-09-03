@@ -1,9 +1,9 @@
 var moment = require("moment")
-
+var holidays=require("../model/holiday")
 function validation(req, res, next) {
     var date = req.body;
     var day = Object.values(date);
-    console.log(moment(day, 'DD-MMM-YYYY'))
+   
     var exitsdate = moment(day, 'DD-MMM-YYYY').isAfter('31-jul-2020')
 
     if (exitsdate === true) {
@@ -16,31 +16,27 @@ function validation(req, res, next) {
 function holiday(req, res,next) {
     var date = req.body;
     var day = Object.values(date);
-    
     var now = moment(day, 'DD-MMM-YYYY');
+    var holiday=holidays.findOne({holidayDate:day});
+console.log(holiday)
     if (now.isValid()) {
         var week = now.day();
         if (week == 0 || week == 6) {
             res.status(200).json({ message: "no data for saturday and sunday" })
+        
+        }
+        if(holiday==true){
+            res.status(200).json({message:"mandatory leave"})
         }
         else {
-            next();
+            res.status(200).json({ message: "invalid Date" })
         }
     }
     else {
         res.status(404).json({ message: "invalid Date" })
     }
 }
-function validateDate(req,res,next) {
-    try {var date = req.body;
-        var day = Object.values(date);
-        console.log(new Date(day).toISOString());
-        new Date(day).toISOString();
-        next();
-    } catch (e) { 
-        res.status(404).json({ message: `no data for ${day}` }); 
-    }
-}
+
 
 
 
@@ -48,5 +44,5 @@ function validateDate(req,res,next) {
 module.exports = {
     holiday,
     validation,
-    validateDate
+   
 }
