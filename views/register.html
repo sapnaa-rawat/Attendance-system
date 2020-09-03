@@ -22,14 +22,14 @@
                         <label for="name"
                             class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Name</label>
                         <div class=" col-sm-10">
-                            <input type="text" class="form-control col-form-label-sm" id="name">
+                            <input type="text" class="form-control col-form-label-sm" name="name" id="name">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="email" class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Email
                             address</label>
                         <div class=" col-sm-10">
-                            <input type="email" class="form-control col-form-label-sm" id="email"
+                            <input type="email" class="form-control col-form-label-sm" name="email" id="email"
                                 aria-describedby="emailHelp">
                             <small id="emailHelp" class="form-text form-control-sm text-muted font-italic">We'll never
                                 share your email
@@ -42,41 +42,42 @@
                         <label for="phone"
                             class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Phone</label>
                         <div class=" col-sm-10">
-                            <input type="text" class="form-control col-form-label-sm" id="phone">
+                            <input type="text" class="form-control col-form-label-sm" name="phone" id="phone">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="skype" class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Skype
                             id</label>
                         <div class=" col-sm-10">
-                            <input type="text" class="form-control col-form-label-sm" id="skype">
+                            <input type="text" class="form-control col-form-label-sm" name="skype" id="skype">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="designation"
                             class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Designation</label>
                         <div class=" col-sm-10">
-                            <input type="text" class="form-control col-form-label-sm" id="designation">
+                            <input type="text" class="form-control col-form-label-sm" name="designation"
+                                id="designation">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="technology"
                             class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Technology</label>
                         <div class=" col-sm-10">
-                            <input type="text" class="form-control col-form-label-sm" id="technology">
+                            <input type="text" class="form-control col-form-label-sm" name="technology" id="technology">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="ID" class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">ID</label>
+                        <label for="id" class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">ID</label>
                         <div class=" col-sm-10">
-                            <input type="text" class="form-control col-form-label-sm" id="ID">
+                            <input type="text" class="form-control col-form-label-sm" name="id" id="id">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="password"
                             class="font-weight-bold col-sm-2 col-form-label col-form-label-sm">Password</label>
                         <div class=" col-sm-10">
-                            <input type="password" class="form-control col-form-label-sm" id="password">
+                            <input type="password" class="form-control col-form-label-sm" name="password" id="password">
                         </div>
                     </div>
                     <div class="text-center">
@@ -96,7 +97,21 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
-    <script src="../public/js/submit.js"></script>
+    <script>
+        var form = document.getElementById('register-form');
+        form.addEventListener("submit", async e => {
+            e.preventDefault();
+            const fd = new FormData(this);
+            // console.log(fd);
+            var response = await fetch('localhost:3000/register', {
+                method: 'post',
+                mode:'cors',
+                body: fd
+            });
+            let result = await response.json();
+            console.log(result);
+        });
+    </script>
 </body>
 
 </html>
