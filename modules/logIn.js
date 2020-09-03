@@ -20,6 +20,7 @@ function validate(req, res, next) {
 
 async function login(req, res, next) {
     var { email, password } = req.body;
+    localStorage.setItem('email',email);
     // null check
     if (email.length === 0) {
         res.status(400).send({ message: "Please provide an email." })

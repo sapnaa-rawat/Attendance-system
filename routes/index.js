@@ -1,10 +1,17 @@
 var express = require('express');
 var router = express.Router();
+var checkAttendance=require("../modules/check")
+var loginHandler = require('../modules/logIn');
+router.post('/dailycheck',loginHandler.validate,checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
+
 const forget_password = require("../modules/forget_password");
+var Attendance=require("../modules/attendance-record")
 
 // Also has a validate middleware for authorising token on protected routes
-var loginHandler = require('../modules/logIn');
+
+
 var registerhandler = require('../modules/register');
+
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -12,8 +19,10 @@ var registerhandler = require('../modules/register');
 // });
 
 router.route("/forgot_Password").post(forget_password.forgot_Password);
+router.post('/markattendance',Attendance.authenticateToken,  Attendance.findIdfromemail,Attendance.markAttendance)
 
-router.get('/login', loginHandler.login);
+
+router.post('/login', loginHandler.login);
 
 router.post('/register', registerhandler.register);
 
