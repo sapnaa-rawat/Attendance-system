@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var data=require("../modules/check")
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.post('/dailycheck', data.validation,data.holiday,);
 
 module.exports = router;
