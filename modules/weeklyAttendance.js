@@ -1,6 +1,8 @@
 const express = require('express');
+const moment=require('moment')
 const resourceModel = require('../model/resource');
 const holidayModel = require('../model/holiday')
+const attendanceModel=require('../model/attendance');
 
 
 const authenticateToken = (req, res, next) => {
@@ -66,30 +68,37 @@ function is_notweekend(req, res, next) {
     })
 } */
 
-function weeklyAttendance(req, res, next) {
-    let id = req.id;
+ async function weeklyAttendance(req, res, next) {
+    //let id = req.id;
+    let id=req.body.id;
     let dateforsearch = req.body.date;
-    for (let i = 0; i < 5; i++) {
-        dataModel.find({
-            'id': id,
+    let temp=[];
+    let userdata=[];
+    console.log(dateforsearch);
+    for (let i = 0; i <6; i++) {
+       dbdata=  await attendanceModel.findOne({
+            'empid': id,
             'date': dateforsearch
-        }).exec(function (error, data) {
-            if (error) {
-                return res.status(422).send({
-                    msg: 'something went wrong'
-                })
-            }
-            console.log(data.date+'>>>>>'+data.attendance);
-        })
-         dateforsearch = moment(dateforsearch).add(1, 'days');
+        });
+        temp.push(dbdata);
+        dateforsearch = moment(dateforsearch).add(1, 'days').format('DD-MMM-YYYY')
+        
     }
-
-
+   // console.log(temp[0])
+    for(let iterator=1;iterator<temp.length;iterator++){
+        userdata.push(temp[iterator]);
+    }
+    
+    
+    let tempdata=userdata.map(function(value,index,arr){
+            return `your attendance on ${userdata[index].date}+ " is  " + ${userdata[index].empattendance}`;
+    })
+    console.log(tempdata);
 }
 
 module.exports = {
     weeklyAttendance,
     is_notweekend,
     findIdfromemail,
-    is_holiday
+    //is_holiday
 }

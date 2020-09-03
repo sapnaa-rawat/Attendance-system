@@ -46,10 +46,12 @@ function findIdfromemail(req, res, next) {
 
 function markAttendance(req, res, next) {
 console.log(req.body);
-  let Date = moment().format('DD-MMM-YYYY');
+let Date=req.body.date;
+  Date = moment(req.body.date).format("DD-MMM-YYYY");
+  
   console.log(Date);
-  let empId=req.id;
-  // empId= req.body.empid;
+  //let empId=req.id;
+    let empId= req.body.empid;
   let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
