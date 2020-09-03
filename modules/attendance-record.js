@@ -70,28 +70,6 @@ console.log(req.body);
     });
 }
 
-
-/*
-
-function updateAttendance(req, res, next) {
-
-  let employerDetails = req.body;
-  let email = req.user.email;
-  attendance.updateOne({
-      "email": email
-  }, {
-      $set: employerDetails
-  }, function (error, data) {
-      if (error) {
-          return res.status(500).send({
-              message: error
-          });
-      }
-      return res.status(200).send(`user updated on id:${email}`);
-  });
-}
-*/
-
 module.exports={
   markAttendance,
   authenticateToken,
@@ -100,55 +78,3 @@ module.exports={
 
 
 
-
-/*
-var Employee = require('../model/resource');
-
-
-router.get('/', function(req, res){
-     Employee.getEmployees(function(err,employees){
-         if(err) throw err;
-         res.json(employees);
-     });
- })
- 
-router.post('/', function(req, res){
-    var newEmployee = {
-        name: req.body.name,
-        position : req.body.position,
-        department : req.body.department,
-        salary: req.body.salary
-    }
-     Employee.addEmployee(newEmployee,function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
-
- router.put('/:_id', function(req, res){
-     var update = {
-        name: req.body.name,
-        position : req.body.position,
-        department : req.body.department,
-        salary: req.body.salary
-    }
-     Employee.updateEmployee(req.params._id , update, function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
- router.delete('/:_id', function(req, res){
-     
-     Employee.deleteEmployee(req.params._id ,  function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
- router.get('/:_id', function(req, res){
-    
-     Employee.getEmployee(req.params._id , function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
-module.exports = router*/
