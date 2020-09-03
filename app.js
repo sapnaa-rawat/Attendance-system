@@ -23,6 +23,17 @@ const db=mongoose.connection;
 db.on('error',console.error.bind(console,'connection error'));
 db.once('open',()=>console.log('connection established'));
 
+app.use(helmet());
+
+//mongo db server connection
+
+mongoose.connect('mongodb://localhost/basicProject',{ useNewUrlParser: true ,useUnifiedTopology: true , useFindAndModify : false});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("connection established");
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
