@@ -52,7 +52,7 @@ async function login(req, res, next) {
             res.status(400).send({ message: "Invalid password." });
         }
     }
-    catch (error) {
+    catch (err) {
         res.status(404).send({ error: err, message: "No such user." });
     }
 }
