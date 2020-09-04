@@ -1,10 +1,12 @@
 var resource = require('../model/resource');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+var LocalStorage = require('node-localstorage').LocalStorage;
+var localStorage = new LocalStorage('./scratch');
 
 const token_secret = "any$random$auth$token";
 
-function validate(req, res, next) {
+function validateToken(req, res, next) {
     const token = req.header('auth-token');
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
@@ -58,4 +60,4 @@ async function login(req, res, next) {
     }
 }
 
-module.exports = { validate, login };
+module.exports = { validateToken, login };
