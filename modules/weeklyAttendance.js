@@ -91,9 +91,9 @@ function is_notweekend(req, res, next) {
     
     
     let tempdata=userdata.map(function(value,index,arr){
-            return `your attendance on ${userdata[index].date}+ " is  " + ${userdata[index].empattendance}`;
+            return `your attendance on ${userdata[index].date} is ${userdata[index].empattendance}`;
     })
-    console.log(tempdata);
+    return res.status(200).send(tempdata);
 }
 
 module.exports = {
