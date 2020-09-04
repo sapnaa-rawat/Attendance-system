@@ -46,10 +46,12 @@ function findIdfromemail(req, res, next) {
 
 function markAttendance(req, res, next) {
 console.log(req.body);
-  let Date = moment().format('DD-MMM-YYYY');
+let Date=req.body.date;
+  Date = moment(req.body.date).format("DD-MMM-YYYY");
+  
   console.log(Date);
-  let empId=req.id;
-  // empId= req.body.empid;
+  //let empId=req.id;
+    let empId= req.body.empid;
   let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
@@ -71,84 +73,22 @@ console.log(req.body);
 }
 
 
-/*
-
-function updateAttendance(req, res, next) {
-
-  let employerDetails = req.body;
-  let email = req.user.email;
-  attendance.updateOne({
-      "email": email
-  }, {
-      $set: employerDetails
-  }, function (error, data) {
-      if (error) {
-          return res.status(500).send({
-              message: error
-          });
-      }
-      return res.status(200).send(`user updated on id:${email}`);
-  });
-}
-*/
+function is_weekend(req, res, next) {
+    let dateforsearch = req.body.date;
+    var dt = new Date(dateforsearch);
+    var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
+  
+    if (dt.getDay() == 0 && dt.getDay() == 6 && verifyDate == true) {
+        return res.send(holiday);
+    }
+    return res.status(422).send({
+        msg: 'not a valid date to find attendance of whole week'
+    });
+  }
 
 module.exports={
   markAttendance,
   authenticateToken,
-  findIdfromemail
+  findIdfromemail,
+  is_weekend
 }
-
-
-
-
-/*
-var Employee = require('../model/resource');
-
-
-router.get('/', function(req, res){
-     Employee.getEmployees(function(err,employees){
-         if(err) throw err;
-         res.json(employees);
-     });
- })
- 
-router.post('/', function(req, res){
-    var newEmployee = {
-        name: req.body.name,
-        position : req.body.position,
-        department : req.body.department,
-        salary: req.body.salary
-    }
-     Employee.addEmployee(newEmployee,function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
-
- router.put('/:_id', function(req, res){
-     var update = {
-        name: req.body.name,
-        position : req.body.position,
-        department : req.body.department,
-        salary: req.body.salary
-    }
-     Employee.updateEmployee(req.params._id , update, function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
- router.delete('/:_id', function(req, res){
-     
-     Employee.deleteEmployee(req.params._id ,  function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
- router.get('/:_id', function(req, res){
-    
-     Employee.getEmployee(req.params._id , function(err,employee){
-         if(err) throw err;
-         res.json(employee);
-     });
- })
-module.exports = router*/
