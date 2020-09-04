@@ -11,13 +11,13 @@ function validation(req, res, next) {
         next();
     }
     else {
-        res.status(404).json({ message: "No data for "+date })
+        res.status(422).json({ message: "No data for "+date })
     }
 }
 
 async function attendance(req, res, next) {
     var date = req.body.date;
- 
+    var empid=req.body.empid;
     var now = moment(date, 'DD-MMM-YYYY');
 
     if (now.isValid()) {
@@ -27,15 +27,23 @@ async function attendance(req, res, next) {
 
         }
         else {
-
-            var result = await empattendance.find({ "date": date});
+                if(empid===undefined){
+            var result = await empattendance.find({  "date": date , "project":true  });
 
             if (result.length===0) {
                return res.status(404).json({ message: "attendance not filled" });
             }
             res.status(200).send(result)
         }
+        var result = await empattendance.find({  "date": date , "empid":empid });
+
+        if (result.length===0) {
+           return res.status(404).json({ message: "attendance not filled" });
+        }
+        res.status(200).send(result)
     }
+    }
+    
     else {
         res.status(404).json({ message: "invalid Date" })
     }
@@ -45,8 +53,8 @@ function holiday(req, res, next) {
     var date = req.body.date;
     
 
-    for (var i = 0; i <= 9; i++) {
-   
+    for (var i = 0; i <= 4; i++) {
+
         if (arr[i] == date) {
            
             res.status(200).json({ message: "mandatory holiday" })
