@@ -1,23 +1,24 @@
 var moment = require("moment")
-var empattendance = require("../model/attendance")
+var empattendance = require("../model/attendance");
+const { json } = require("body-parser");
 
 
 var arr = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
 function validation(req, res, next) {
     var date = req.body.date;
-   
+
     var exitsdate = moment(date, 'DD-MMM-YYYY').isAfter('31-jul-2020')
     if (exitsdate === true) {
         next();
     }
     else {
-        res.status(422).json({ message: "No data for "+date })
+        res.status(422).json({ message: "No data for " + date })
     }
 }
 
 async function attendance(req, res, next) {
     var date = req.body.date;
-    var empid=req.body.empid;
+    var empid = req.body.empid;
     var now = moment(date, 'DD-MMM-YYYY');
 
     if (now.isValid()) {
@@ -27,23 +28,30 @@ async function attendance(req, res, next) {
 
         }
         else {
-                if(empid===undefined){
-            var result = await empattendance.find({  "date": date , "project":true  });
+            if (empid === undefined) {
+                var result = await empattendance.find({ "date": date });
 
-            if (result.length===0) {
-               return res.status(404).json({ message: "attendance not filled" });
+                if (result.length === 0) {
+                    return res.status(400).json({ message: "attendance not filled" });
+                }
+                var temp = [];
+                result.forEach(async function (key) {
+
+                    temp.push({ "empid": key.empid, "status": key.empattendance, "date": key.date });
+                }); res.status(200).json(temp)
             }
-            res.status(200).send(result)
-        }
-        var result = await empattendance.find({  "date": date , "empid":empid });
+            var result = await empattendance.find({ "date": date, "empid": empid });
 
-        if (result.length===0) {
-           return res.status(404).json({ message: "attendance not filled" });
+            if (result.length === 0) {
+                return res.status(400).json({ message: "attendance not filled" });
+            }
+            result.forEach(key => {
+                res.status(200).json({ "empid": key.empid, "status": key.empattendance, "date": key.date })
+
+            });
         }
-        res.status(200).send(result)
     }
-    }
-    
+
     else {
         res.status(404).json({ message: "invalid Date" })
     }
@@ -51,12 +59,12 @@ async function attendance(req, res, next) {
 
 function holiday(req, res, next) {
     var date = req.body.date;
-    
+
 
     for (var i = 0; i <= 4; i++) {
 
         if (arr[i] == date) {
-           
+
             res.status(200).json({ message: "mandatory holiday" })
 
         }
