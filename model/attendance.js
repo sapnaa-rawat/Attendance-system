@@ -4,18 +4,14 @@ var Schema = mongoose.Schema;
 
 var attendance = new Schema({
   name: { type: String },
-  empattendance: { type: String, required: true,
-    index:{
-        unique: true,
-      },
+  empattendance: { type: String,
+    
       enum: ['p', 'PNB','PL', 'UPL', 'HD','H','OH','WFH','UCL','PCL'],
     
   
   },
-empid: {type:Number , require :true,
-    index:{
-        unique: true,
-      },
+empid: {type:Number ,
+  
     },
   
  date:{type: String, require :true,
@@ -30,4 +26,4 @@ empid: {type:Number , require :true,
 
 
 var attendances = mongoose.model("attendance", attendance);
-module.exports = attendances;
+module.exports = attendances
