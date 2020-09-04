@@ -1,6 +1,9 @@
 var model = require('../model/resource');
 var moment = require('moment');
 var validator = require("email-validator");
+var bcrypt = require('bcrypt');
+
+const saltRounds = 10;
 
 function validate(req, res, next) {
     var { name, email, phone, skype, designation, technology, id, password, project } = req.body;
@@ -48,6 +51,7 @@ async function resourceExists(req, res, next) {
     try {
         var existing = await model.find({email:email});
     if (existing.length > 0) {
+        // console.log(existing);
         res.status(409).send({ message: "Resource already exists.",
          resource:{
              id:existing[0].id,
@@ -65,7 +69,36 @@ async function resourceExists(req, res, next) {
 }
 
 function register(req, res, next) {
-    var { name, email, phone, skype, designation, technology, id, password } = req.body;
+    var { name, email, phone, skype, designation, technology, id, password, project } = req.body;
+    try {
+        //hash the password
+        const hashPass = await bcrypt.hash(password,saltRounds);
+        //get the date in the required format
+        const date = moment(new Date).format("DD-MMM-YYYY");
+        //sanity check for project
+        var project = (project===true)?true:false;
+        //Create record
+        let newResource = new model({
+            name: name,
+            email: email,
+            phone: phone,
+            skype: skype,
+            designation: designation,
+            technology, technology,
+            id: id,
+            password: hashPass,
+            project: project,
+            deleted: false,
+            createdOn: date,
+            modifiedOn: date
+        });
+        newResource.save()
+            .then(doc => res.status(201).send({ message: "User created sucessfully." }))
+            .catch(err => res.status(500).send({ message: "Err! User creation failed.", error:err }));
+        
+    } catch (error) {
+        res.status(500).send({message:"Password hash failed.",error:error});
+    }
 }
 
 
