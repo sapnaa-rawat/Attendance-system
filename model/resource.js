@@ -23,6 +23,7 @@ var resource = new Schema({
   createdOn: { type: Date, default: Date.now },
   modifiedOn: { type: Date, default: Date.now },
   password : String,
+  project : false,
 });
 
 resource.plugin(autoIncrement.plugin, {
