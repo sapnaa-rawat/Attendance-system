@@ -26,9 +26,6 @@ function validate(req, res, next) {
         if(!technology){
             throw new Error("Technology not provided.");
         }
-        if(!id){
-            throw new Error("Id not provided.");
-        }
         if(!password){
             throw new Error("Password not provided.");
         }
@@ -77,7 +74,7 @@ async function register(req, res, next) {
         // const date = moment(new Date).format("DD-MMM-YYYY");
         const date = new Date().get;
         //sanity check for project
-        var project = (project===true)?true:false;
+        var project = project===true;
         //Create record
         let newResource = new model({
             name: name,
