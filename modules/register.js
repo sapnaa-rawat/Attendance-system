@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 function validate(req, res, next) {
-    var { name, email, phone, skype, designation, technology, id, password, project } = req.body;
+    var { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
         if(!name){
             throw new Error("Name not provided.");
@@ -14,8 +14,8 @@ function validate(req, res, next) {
         if(!email){
             throw new Error("Email not provided.");
         }
-        if(!phone){
-            throw new Error("Phone not provided.");
+        if(!phoneNumber){
+            throw new Error("Phone number not provided.");
         }
         if(!skype){
             throw new Error("Skype not provided.");
@@ -42,12 +42,12 @@ function validate(req, res, next) {
         
     } 
     catch (error) {
-        res.status(400).send({message:"Invalid details", error:error});
+        res.status(400).send({message:"Invalid details", error:`${error}`});
     }
 }
 
 async function resourceExists(req, res, next) {
-    const {email} = req.body.email;
+    const email = req.body.email;
     try {
         var existing = await model.find({email:email});
     if (existing.length > 0) {
@@ -68,23 +68,24 @@ async function resourceExists(req, res, next) {
     }
 }
 
-function register(req, res, next) {
-    var { name, email, phone, skype, designation, technology, id, password, project } = req.body;
+async function register(req, res, next) {
+    var { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
         //hash the password
         const hashPass = await bcrypt.hash(password,saltRounds);
         //get the date in the required format
-        const date = moment(new Date).format("DD-MMM-YYYY");
+        // const date = moment(new Date).format("DD-MMM-YYYY");
+        const date = new Date().get;
         //sanity check for project
         var project = (project===true)?true:false;
         //Create record
         let newResource = new model({
             name: name,
             email: email,
-            phone: phone,
+            phoneNumber: phoneNumber,
             skype: skype,
             designation: designation,
-            technology, technology,
+            technology: technology,
             id: id,
             password: hashPass,
             project: project,
