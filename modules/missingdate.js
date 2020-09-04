@@ -1,8 +1,9 @@
 var moment = require('moment');
-
+var schema=require('./attendance');
 
 function missing(req, res, next){
     var holidays=['03-aug-2020'];
+    var missingdates=[];
 
     var fdate = "2020-07-31";
         var fromdate = moment(fdate).format('DD-MMM-YYYY');
@@ -22,7 +23,12 @@ function missing(req, res, next){
                         var hd = new Date(date);
                        if(hd.valueOf()!=m.valueOf())
                        {
-                           console.log(m.format('DD-MMM-YYYY'));
+                           let data=schema.find({"empattendance":{"$gte": ISODate(m.format('DD-MMM-YYYY'))}}).exec();
+                           if(data === null && data === '') {
+                            missingdates=[]
+                            //adding date in array
+                         }
+
                        }
                     })
                 }
