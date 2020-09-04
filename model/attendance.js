@@ -3,19 +3,23 @@ var Schema = mongoose.Schema;
 
 
 var attendance = new Schema({
-  name: { type: String },
-  
-  empattendance: { type: String, required: true,
-      enum: ['p', 'PNB','PL', 'UPL', 'HD','H','OH','WFH','UCL','PCL']
+  name: {
+    type: String
   },
-
-empid: {type:Number , require :true
-    },
-  
- date:{type: Date, require :true
-    }
-   
-
+  empattendance: {
+    type: String,
+    required: true,
+    enum: ['p', 'PNB', 'PL', 'UPL', 'HD', 'H', 'OH', 'WFH', 'UCL', 'PCL']
+  },
+  empid: {
+    type: Number,
+    require: true
+  },
+  date: {
+    type: Date,
+    require: true
+  },
+  project : false
 });
 
 
