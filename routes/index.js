@@ -12,7 +12,7 @@ router.post('/login', loginHandler.login); //login user API
 
 router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
 
-router.post('/dailycheck',checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
+router.post('/dailycheck',loginHandler.validate,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
 
 router.post('/markattendance',Attendance.markAttendance);
 

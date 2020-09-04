@@ -29,7 +29,7 @@ async function attendance(req, res, next) {
         }
         else {
             if (empid === undefined) {
-                var result = await empattendance.find({ "date": date });
+                var result = await empattendance.find({ "date": date ,"project":true});
 
                 if (result.length === 0) {
                     return res.status(400).json({ message: "attendance not filled" });
@@ -38,7 +38,8 @@ async function attendance(req, res, next) {
                 result.forEach(async function (key) {
 
                     temp.push({ "empid": key.empid, "status": key.empattendance, "date": key.date });
-                }); res.status(200).json(temp)
+                });
+                return res.status(200).json(temp)
             }
             var result = await empattendance.find({ "date": date, "empid": empid });
 
