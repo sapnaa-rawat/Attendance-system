@@ -3,7 +3,7 @@ const missingdate = require('../modules/missingdate');
 var router = express.Router();
 var checkAttendance=require("../modules/check")
 var loginHandler = require('../modules/logIn');
-router.post('/dailycheck',loginHandler.validate,checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
+router.get('/dailycheck',checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
 
 const forget_password = require("../modules/forget_password");
 var Attendance=require("../modules/attendance-record")
