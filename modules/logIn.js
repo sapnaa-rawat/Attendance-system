@@ -1,6 +1,8 @@
 var resource = require('../model/resource');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+var LocalStorage = require('node-localstorage').LocalStorage;
+var localStorage = new LocalStorage('./scratch');
 
 const token_secret = "any$random$auth$token";
 
@@ -54,7 +56,7 @@ async function login(req, res, next) {
         }
     }
     catch (err) {
-        res.status(404).send({ error: err, message: "No such user." });
+        res.status(404).send({ message: "No such user.", error: `${err}` });
     }
 }
 
