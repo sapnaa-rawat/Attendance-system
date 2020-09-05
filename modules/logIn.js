@@ -7,7 +7,8 @@ var localStorage = new LocalStorage('./scratch');
 const token_secret = "any$random$auth$token";
 
 function validate(req, res, next) {
-    const token = req.header('auth-token');
+    const token = req.headers.authorization.split(" ")[1];
+    console.log(token)
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
     }
@@ -48,7 +49,8 @@ async function login(req, res, next) {
             }, token_secret);
             res.status(200).header('auth-token', token).send({
                 message: "Login sucessful",
-                status: "sucess"
+                status: "sucess",
+                token:token
             });
         }
         else {
