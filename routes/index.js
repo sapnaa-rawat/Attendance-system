@@ -1,7 +1,7 @@
 var express = require('express');
 const missingdate = require('../modules/missingdate');
 var router = express.Router();
-var checkAttendance=require("../modules/check")
+var checkAttendance=require("../modules/dailyattendance")
 var loginHandler = require('../modules/logIn');
 const forget_password = require("../modules/forget_password");
 var Attendance=require("../modules/attendance-record");
@@ -21,7 +21,10 @@ router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendanc
 router.post('/register', register.validate, register.resourceExists, register.register);
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 
-router.get('/missing', missingdate.missing);
+router.get('/missing',loginHandler.validate,missingdate.missing);
+
+router.post('/login', loginHandler.login);
+
 
 module.exports = router;
 // Attendance.authenticateToken,,  Attendance.findIdfromemail, Attendance.is_weekend

@@ -49,7 +49,8 @@ async function login(req, res, next) {
             }, token_secret, { expiresIn:'3h'});
             res.status(200).header('auth-token', token).send({
                 message: "Login sucessful",
-                status: "sucess"
+                status: "sucess",
+                token:token
             });
         }
         else {
