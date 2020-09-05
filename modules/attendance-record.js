@@ -34,6 +34,7 @@ function findIdfromemail(req, res, next) {
       if (error) return res.status(422).send("something went wrong")
       if (response)
           req.id = response.id;
+          req.project  =response.project ;
       next()
   })
 }
@@ -49,12 +50,15 @@ console.log(req.body);
   let Date = moment().format('DD-MMM-YYYY');
   console.log(Date);
   let empId=req.id;
+  let project =req.project ;
   // empId= req.body.empid;
   let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
     empattendance: empAttendance,
-    empid:empId
+    empid:empId,
+    project :project 
+
   });
   attendancedata
     .save()
@@ -70,11 +74,28 @@ console.log(req.body);
     });
 }
 
-module.exports={
-  markAttendance,
-  authenticateToken,
-  findIdfromemail
+
+
+
+function is_weekend(req, res, next) {
+  let dateforsearch = req.body.date;
+  var dt = new Date(dateforsearch);
+  var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
+
+  if (dt.getDay() == 0 && dt.getDay() == 6 && verifyDate == true) {
+      return res.send(holiday);
+  }
+  return res.status(422).send({
+      msg: 'not a valid date to find attendance of whole week'
+  });
 }
 
 
+
+module.exports={
+  markAttendance,
+  authenticateToken,
+  findIdfromemail,
+  is_weekend
+}
 

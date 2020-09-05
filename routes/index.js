@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const forget_password = require("../modules/forget_password");
+
 var Attendance=require("../modules/attendance-record")
 
 /* GET home page. */
@@ -8,9 +8,9 @@ var Attendance=require("../modules/attendance-record")
 //   res.render('index', { title: 'Express' });
 // });
 
-router.route("/forgot_Password").post(forget_password.forgot_Password);
-router.post('/markattendance',Attendance.authenticateToken,  Attendance.findIdfromemail,Attendance.markAttendance)
 
+router.post('/markattendance',Attendance.markAttendance)
 
+//,Attendance.authenticateToken,  Attendance.findIdfromemail,Attendance.is_weekend
 
 module.exports = router;
