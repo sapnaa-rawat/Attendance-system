@@ -12,17 +12,13 @@ var app = express();
 app.use(helmet());
 
 //mongo db server connection
-
-<<<<<<< HEAD
 mongoose.connect('mongodb://localhost/basicProject', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
   useCreateIndex: true
 });
-=======
-mongoose.connect('mongodb://localhost/basicProject',{ useNewUrlParser: true ,useUnifiedTopology: true , useFindAndModify : false, useNewUrlParser: true});
->>>>>>> mahesh
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {

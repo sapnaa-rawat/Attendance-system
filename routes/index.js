@@ -18,7 +18,7 @@ router.post('/markattendance',Attendance.markAttendance)
 router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 router.get('/missing',missingdate.missing);
-
+// loginHandler.validate,
 router.post('/login', loginHandler.login);
 
 module.exports = router;
