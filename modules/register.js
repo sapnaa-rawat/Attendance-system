@@ -74,7 +74,7 @@ async function register(req, res, next) {
         // const date = moment(new Date).format("DD-MMM-YYYY");
         const date = new Date();
         //sanity check for project
-        var project = (project===true)?true:false;
+        var project = project===true;
         //Create record
         let newResource = new model({
             name: name,
