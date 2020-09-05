@@ -17,8 +17,8 @@ router.post('/dailycheck',loginHandler.validateToken,checkAttendance.holiday,che
 router.post('/markattendance',Attendance.markAttendance);
 
 router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
-// register new resource
-router.post('/register', register.validate, register.resourceExists, register.register);
+
+router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 
 router.get('/missing',loginHandler.validateToken,missingdate.missing);
