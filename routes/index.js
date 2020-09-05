@@ -17,7 +17,7 @@ router.post('/dailycheck',loginHandler.validateToken,checkAttendance.holiday,che
 router.post('/markattendance',Attendance.markAttendance);
 
 router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
-
+// register new resource
 router.post('/register', register.validate, register.resourceExists, register.register);
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 
