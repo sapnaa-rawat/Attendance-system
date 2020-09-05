@@ -16,7 +16,7 @@ function validateToken(req, res, next) {
         //req.user = verified;
         next();
     } catch (error) {
-        res.status(401).send({ message: "Invalid token.", error:`${error}` });
+        res.status(401).send({ message: "Invalid token.", error: `${error}` });
     }
 }
 
@@ -24,10 +24,10 @@ async function login(req, res, next) {
     var { email, password } = req.body;
     // null check
     if (email.length === 0) {
-        res.status(400).send({ message: "Please provide an email." })
+        res.status(400).render('login', { message: "", error: "Email cannot be empty!" });
     }
     if (password.length === 0) {
-        res.status(400).send({ message: "Please provide a password." })
+        res.status(400).render('login', { message: "", error: "No password!" });
     }
 
     try {
@@ -37,7 +37,7 @@ async function login(req, res, next) {
 
         if (match) {
             //save email in localstorage
-            localStorage.setItem('email',email);
+            localStorage.setItem('email', email);
             // give some permissions
             const token = jwt.sign({
                 id: user.id,
@@ -46,20 +46,23 @@ async function login(req, res, next) {
                     view: true,
                     update: true,
                 }
-            }, token_secret, { expiresIn:'3h'});
-            res.status(200).header('auth-token', token).send({
+            }, token_secret, { expiresIn: '3h' });
+            res.status(200).header('auth-token', token).render('login', {
                 message: "Login sucessful",
-                status: "sucess",
-                token:token
+                error: ""
             });
         }
         else {
-            res.status(400).send({ message: "Invalid password." });
+            res.status(400).render('login', { message: "", error: "Invalid password." });
         }
     }
     catch (err) {
-        res.status(404).send({ message: "No such user.", error: `${err}` });
+        res.status(404).render('login', { message: "", error: "No such user." });
     }
 }
 
-module.exports = { validateToken, login };
+function loginPage(req, res) {
+    res.render('login', { message: "", error: "" });
+}
+
+module.exports = { validateToken, login, loginPage };

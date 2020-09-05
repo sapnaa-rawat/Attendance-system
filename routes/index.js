@@ -23,7 +23,7 @@ router.post('/register', register.validate, register.resourceExists, register.re
 
 router.get('/missing',loginHandler.validateToken,missingdate.missing);
 
-router.post('/login', loginHandler.login);
+router.get('/login', loginHandler.loginPage);
 
 
 router.get('/register', register.registerPage);
