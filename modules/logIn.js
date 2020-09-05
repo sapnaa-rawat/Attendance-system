@@ -1,11 +1,14 @@
 var resource = require('../model/resource');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+var LocalStorage = require('node-localstorage').LocalStorage;
+var localStorage = new LocalStorage('./scratch');
 
 const token_secret = "any$random$auth$token";
 
 function validate(req, res, next) {
-    const token = req.header('auth-token');
+    const token = req.headers.authorization.split(" ")[1];
+ 
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
     }
@@ -46,15 +49,16 @@ async function login(req, res, next) {
             }, token_secret);
             res.status(200).header('auth-token', token).send({
                 message: "Login sucessful",
-                status: "sucess"
+                status: "sucess",
+                token:token
             });
         }
         else {
             res.status(400).send({ message: "Invalid password." });
         }
     }
-    catch (error) {
-        res.status(404).send({ error: err, message: "No such user." });
+    catch (err) {
+        res.status(404).send({ message: "No such user.", error: `${err}` });
     }
 }
 
