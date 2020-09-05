@@ -21,7 +21,7 @@ router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendanc
 router.post('/register', register.validate, register.resourceExists, register.register);
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 
-router.get('/missing',loginHandler.validate,missingdate.missing);
+router.get('/missing',loginHandler.validateToken,missingdate.missing);
 
 router.post('/login', loginHandler.login);
 
