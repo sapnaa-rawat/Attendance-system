@@ -1,26 +1,31 @@
 var express = require('express');
+const missingdate = require('../modules/missingdate');
 var router = express.Router();
-var checkAttendance=require("../modules/check")
+var checkAttendance=require("../modules/dailyattendance")
 var loginHandler = require('../modules/logIn');
-router.post('/dailycheck',loginHandler.validate,checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
-
 const forget_password = require("../modules/forget_password");
-var Attendance=require("../modules/attendance-record")
-var weeklyAttendanceCheck=require('../modules/weeklyAttendance');
+var Attendance=require("../modules/attendance-record");
+var weeklyAttendanceCheck=require('../modules/weeklyAttendanceString');
+var register = require('../modules/register')
 
-// Also has a validate middleware for authorising token on protected routes
+router.post('/login', loginHandler.login); //login user API
 
+router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
+router.post('/dailycheck',loginHandler.validateToken,checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
+
+router.post('/markattendance',Attendance.markAttendance);
 
 router.route("/forgot_Password").post(forget_password.forgot_Password);
 router.post('/markattendance',Attendance.markAttendance)
-router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
+router.route("/checkWeeklyAttendance").get(loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
+router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
+
+router.get('/missing',loginHandler.validateToken,missingdate.missing);
 
 router.post('/login', loginHandler.login);
 
+
 module.exports = router;
+// Attendance.authenticateToken,,  Attendance.findIdfromemail, Attendance.is_weekend
