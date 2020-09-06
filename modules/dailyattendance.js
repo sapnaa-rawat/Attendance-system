@@ -46,10 +46,10 @@ async function attendance(req, res, next) {
             if (result.length === 0) {
                 return res.status(400).json({ message: "attendance not filled" });
             }
-            result.forEach(key => {
-                res.status(200).json({ "empid": key.empid, "status": key.empattendance, "date": key.date })
+           
+                res.status(200).json({ "empid": key.empid, "status": key.empattendance, "date": key.date });
 
-            });
+       
         }
     }
 

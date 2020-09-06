@@ -26,6 +26,7 @@ function findIdfromemail(req, res, next) {
     if (error) return res.status(422).send("something went wrong")
     if (response)
       req.id = response.id;
+      req.project=response.project;
     next()
   })
 }
@@ -38,11 +39,13 @@ function markAttendance(req, res, next) {
   console.log(Date);
   //let empId=req.id;
   let empId = req.body.empid;
+  let project=req.project;
   let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
     empattendance: empAttendance,
-    empid: empId
+    empid: empId,
+    project:project
   });
   attendancedata
     .save()

@@ -1,7 +1,7 @@
 var express = require('express');
 const missingdate = require('../modules/missingdate');
 var router = express.Router();
-var checkAttendance=require("../modules/check")
+var checkAttendance=require("../modules/dailyattendance")
 var loginHandler = require('../modules/logIn');
 const forget_password = require("../modules/forget_password");
 var Attendance=require("../modules/attendance-record");
