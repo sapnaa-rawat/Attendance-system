@@ -1,41 +1,42 @@
-var attendance =require('../model/attendance')
+var attendance = require('../model/attendance')
 var Employee = require('../model/resource');
-var moment=require('moment');
+var moment = require('moment');
+var moment = require('moment-timezone');
 
 
 
 
 
 const authenticateToken = (req, res, next) => {
-    
-  try {
-      
-       const token = req.headers.authorization.split(" ")[1];
-      const decodedToken = jwt.verify(token, "req.session.privatekey");
-      req.user = {
-          email: decodedToken.email
-      };
 
-      next();
-  } catch (err) {
-      res.status(401).json({
-          message: "Auth failed!"
-      });
-  }
+    try {
+
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, "req.session.privatekey");
+        req.user = {
+            email: decodedToken.email
+        };
+
+        next();
+    } catch (err) {
+        res.status(401).json({
+            message: "Auth failed!"
+        });
+    }
 
 }
 
 function findIdfromemail(req, res, next) {
-  let email = req.user.email;
+    let email = req.user.email;
 
-  resourceModel.findOne({
-      "email": email
-  }).exec(function (error, response) {
-      if (error) return res.status(422).send("something went wrong")
-      if (response)
-          req.id = response.id;
-      next()
-  })
+    resourceModel.findOne({
+        "email": email
+    }).exec(function (error, response) {
+        if (error) return res.status(422).send("something went wrong")
+        if (response)
+            req.id = response.id;
+        next()
+    })
 }
 
 
@@ -45,31 +46,32 @@ function findIdfromemail(req, res, next) {
 
 
 function markAttendance(req, res, next) {
-console.log(req.body);
-let Date=req.body.date;
-  Date = moment(req.body.date).format("DD-MMM-YYYY");
-  
-  console.log(Date);
-  //let empId=req.id;
-    let empId= req.body.empid;
-  let empAttendance = req.body.empattendance;
-  let attendancedata = new attendance({
-    date: Date,
-    empattendance: empAttendance,
-    empid:empId
-  });
-  attendancedata
-    .save()
-    .then((doc) => {
-      res.status(200).json({
-        message: "attendance marked successfully",
-        results: doc,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({ message: "not marked" });
+    let Date = req.body.date;
+    //let empId=req.id;
+    let empId = req.body.empid;
+    let empAttendance = req.body.empattendance;
+    Date = moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
+
+    console.log(Date);
+    let attendancedata = new attendance({
+        date: Date,
+        empattendance: empAttendance,
+        empid: empId
     });
+    attendancedata
+        .save()
+        .then((doc) => {
+            res.status(200).json({
+                message: "attendance marked successfully",
+                results: doc,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send({
+                message: "not marked"
+            });
+        });
 }
 
 
@@ -94,10 +96,10 @@ function updateAttendance(req, res, next) {
 }
 */
 
-module.exports={
-  markAttendance,
-  authenticateToken,
-  findIdfromemail
+module.exports = {
+    markAttendance,
+    authenticateToken,
+    findIdfromemail
 }
 
 

@@ -18,7 +18,7 @@ var weeklyAttendanceCheck=require('../modules/weeklyAttendance');
 
 router.route("/forgot_Password").post(forget_password.forgot_Password);
 router.post('/markattendance',Attendance.markAttendance)
-router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
+router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 
 router.post('/login', loginHandler.login);
