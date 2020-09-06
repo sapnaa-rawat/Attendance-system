@@ -13,7 +13,7 @@ var transporter = nodemailer.createTransport({
   requireTLS: true,
   auth: {
     user: "noreplymailed2020@gmail.com",
-    pass: "noReply@12345",
+    pass: "",
   }
 });
 
