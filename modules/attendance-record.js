@@ -44,12 +44,6 @@ function markAttendance(req, res, next) {
     let empAttendance = req.body.empattendance;
     let project=req.body.project;
     Date = moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
-
-  console.log(Date);
-  let empId=req.id;
-  //let empId = req.body.empid;
-  let project=req.project;
-  let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
     empattendance: empAttendance,

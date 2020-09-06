@@ -3,11 +3,12 @@ const moment = require('moment')
 const resourceModel = require('../model/resource');
 const holidayModel = require('../model/holiday')
 const attendanceModel = require('../model/attendance');
-const jwt=require("jsonwebtoken");
+var LocalStorage = require('node-localstorage').LocalStorage;
+var localStorage = new LocalStorage('./scratch');
 
 
 function findIdfromemail(req, res, next) {
-    let email = req.user.email;
+    let email=localStorage.getItem('email');
 
     resourceModel.findOne({
         "email": email
