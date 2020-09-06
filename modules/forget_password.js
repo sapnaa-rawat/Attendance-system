@@ -9,7 +9,7 @@ var transporter = nodemailer.createTransport({
     port: 465,
     auth: {
       user: "noreplymailed2020@gmail.com",
-      pass: "noReply@12345",
+      pass: "",
     },
     secure: true,
   });
