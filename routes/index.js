@@ -12,11 +12,12 @@ router.post('/login', loginHandler.login); //login user API
 
 router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
 
-router.post('/dailycheck',loginHandler.validate,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
+router.get('/dailycheck',loginHandler.validate,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
 
-router.post('/markattendance',Attendance.markAttendance);
+router.post('/markattendance',loginHandler.validate,  Attendance.findIdfromemail, Attendance.markAttendance);
 
 router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
+
 
 router.post('/register', register.validate, register.resourceExists, register.register);
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
