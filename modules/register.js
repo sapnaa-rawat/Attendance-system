@@ -26,9 +26,6 @@ function validate(req, res, next) {
         if(!technology){
             throw new Error("Technology not provided.");
         }
-        if(!id){
-            throw new Error("Id not provided.");
-        }
         if(!password){
             throw new Error("Password not provided.");
         }
@@ -64,7 +61,7 @@ async function resourceExists(req, res, next) {
     }
     } 
     catch (error) {
-        res.status(500).send({message:"Error reading from database."});
+        res.status(500).send({message:"Error reading from database.", error:`${error}`});
     }
 }
 
@@ -75,9 +72,9 @@ async function register(req, res, next) {
         const hashPass = await bcrypt.hash(password,saltRounds);
         //get the date in the required format
         // const date = moment(new Date).format("DD-MMM-YYYY");
-        const date = new Date().get;
+        const date = new Date();
         //sanity check for project
-        var project = (project===true)?true:false;
+        var project = project===true;
         //Create record
         let newResource = new model({
             name: name,
@@ -98,7 +95,7 @@ async function register(req, res, next) {
             .catch(err => res.status(500).send({ message: "Err! User creation failed.", error:err }));
         
     } catch (error) {
-        res.status(500).send({message:"Password hash failed.",error:error});
+        res.status(500).send({message:"Password hash failed.",error:`${error}`});
     }
 }
 

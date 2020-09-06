@@ -6,9 +6,8 @@ var localStorage = new LocalStorage('./scratch');
 
 const token_secret = "any$random$auth$token";
 
-function validate(req, res, next) {
-    const token = req.headers.authorization.split(" ")[1];
-    console.log(token)
+function validateToken(req, res, next) {
+    const token = req.header('auth-token');
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
     }
@@ -17,13 +16,12 @@ function validate(req, res, next) {
         //req.user = verified;
         next();
     } catch (error) {
-        res.status(401).send({ message: "Invalid token." });
+        res.status(401).send({ message: "Invalid token.", error:`${error}` });
     }
 }
 
 async function login(req, res, next) {
     var { email, password } = req.body;
-    localStorage.setItem('email',email);
     // null check
     if (email.length === 0) {
         res.status(400).send({ message: "Please provide an email." })
@@ -38,6 +36,8 @@ async function login(req, res, next) {
         const match = await bcrypt.compare(password, hashed_pass);
 
         if (match) {
+            //save email in localstorage
+            localStorage.setItem('email',email);
             // give some permissions
             const token = jwt.sign({
                 id: user.id,
@@ -46,7 +46,7 @@ async function login(req, res, next) {
                     view: true,
                     update: true,
                 }
-            }, token_secret);
+            }, token_secret, { expiresIn:'3h'});
             res.status(200).header('auth-token', token).send({
                 message: "Login sucessful",
                 status: "sucess",
@@ -62,4 +62,4 @@ async function login(req, res, next) {
     }
 }
 
-module.exports = { validate, login };
+module.exports = { validateToken, login };
