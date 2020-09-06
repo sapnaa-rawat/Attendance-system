@@ -19,13 +19,10 @@ empid: {type:Number , require :true,
     },
   
  date:{type: String, require :true,
-    index:{
-        unique: true,
-      },
-      project : false
-    },
+ },
+         project : false
   
-   
+  
 
 });
 

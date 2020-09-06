@@ -1,19 +1,27 @@
 var express = require('express');
+const missingdate = require('../modules/missingdate');
 var router = express.Router();
+var checkAttendance=require("../modules/dailyattendance")
+var loginHandler = require('../modules/logIn');
+const forget_password = require("../modules/forget_password");
+var Attendance=require("../modules/attendance-record");
+var weeklyAttendanceCheck=require('../modules/weeklyAttendance');
+var register = require('../modules/register')
 
-var Attendance=require("../modules/attendance-record")
+router.post('/login', loginHandler.login); //login user API
 
+router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
 
+router.get('/dailycheck',loginHandler.validateToken,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
 
+router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail, Attendance.markAttendance);
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
+router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
 
-router.post('/markattendance',Attendance.markAttendance)
+router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
+//,Attendance.authenticateToken,  Attendance.findIdfromemail
 
-//Attendance.authenticateToken,  Attendance.findIdfromemail, Attendance.is_weekend,
-
+router.get('/missedattendances',loginHandler.validateToken,missingdate.missing);
 
 module.exports = router;
+// Attendance.authenticateToken,,  Attendance.findIdfromemail, Attendance.is_weekend
