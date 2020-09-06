@@ -1,5 +1,5 @@
 # Attendance-system
-A system to manage attendance of employees in an company.
+A system to manage attendance of employees in a company.
 
 # API Documentation
 
