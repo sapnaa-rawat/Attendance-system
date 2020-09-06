@@ -17,7 +17,7 @@ async function missing(req, res, next){
          var data1=await attendanceschema.find();
          var temp=[];
          data1.forEach((record)=>{temp.push(record.empid)});
-        let length=temp.length;
+       
 
         try{
 

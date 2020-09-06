@@ -38,12 +38,15 @@ function findIdfromemail(req, res, next) {
 }
 
 function markAttendance(req, res, next) {
-    let Date = req.body.date;
-    //let empId=req.id;
-    let empId = req.body.empid;
-    let empAttendance = req.body.empattendance;
-    let project=req.body.project;
-    Date = moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
+  console.log(req.body);
+  let Date = req.body.date;
+  Date = moment(req.body.date).format("DD-MMM-YYYY");
+
+  console.log(Date);
+  let empId=req.id;
+  //let empId = req.body.empid;
+  let project=req.project;
+  let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
     empattendance: empAttendance,
@@ -64,21 +67,6 @@ function markAttendance(req, res, next) {
         message: "not marked"
       });
     });
-    console.log(attendancedata)
-    attendancedata
-        .save()
-        .then((doc) => {
-            res.status(200).json({
-                message: "attendance marked successfully",
-                results: doc,
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({
-                message: "not marked"
-            });
-        });
 }
 
 function is_weekend(req, res, next) {

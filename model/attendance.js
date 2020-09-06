@@ -19,7 +19,7 @@ var attendance = new Schema({
     type: String,
     require: true
   },
-  project :{type:Boolean} 
+  project :{type:Boolean}
 });
 
 

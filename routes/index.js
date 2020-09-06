@@ -20,7 +20,7 @@ router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfrom
 
 router.route("/forgot_Password").post(forget_password.forgot_Password);
 router.post('/markattendance',Attendance.markAttendance)
-router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
+router.route("/checkWeeklyAttendance").get(loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 //loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,
 
