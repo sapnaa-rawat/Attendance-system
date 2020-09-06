@@ -10,7 +10,7 @@ async function missing(req, res, next){
 
          var fdate = "2020-07-31";
         var fromdate = moment(fdate).format('DD-MMM-YYYY');
-        console.log(fromdate,typeof(fromdate));
+     
         var tdate = new Date();
          var todate=moment(tdate).format('DD-MMM-YYYY');
 
@@ -18,6 +18,7 @@ async function missing(req, res, next){
          var temp=[];
 
          data1.forEach((record)=>{temp.push(record.empid)});
+       
 
         try{
 

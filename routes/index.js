@@ -21,10 +21,7 @@ router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendanc
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 //,Attendance.authenticateToken,  Attendance.findIdfromemail
 
-router.get('/missedattendance',loginHandler.validateToken,missingdate.missing);
-
-router.post('/login', loginHandler.login);
-
+router.get('/missedattendances',loginHandler.validateToken,missingdate.missing);
 
 module.exports = router;
 // Attendance.authenticateToken,,  Attendance.findIdfromemail, Attendance.is_weekend
