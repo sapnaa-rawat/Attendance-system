@@ -3,18 +3,22 @@ var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage('./scratch');
+var crypto = require('crypto');
 
-const token_secret = "any$random$auth$token";
+async function generateSecret(){
+    const randomSecret = await crypto.randomBytes(32).toString('hex');
+    process.env.TOKEN_SECRET = randomSecret;
+    return randomSecret;
+}
 
 function validateToken(req, res, next) {
-  
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.header('auth-token') || req.headers.authorization.split(" ")[1];
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
     }
-    try {  console.log(token)
-        const verified = jwt.verify(token, token_secret);
-        //req.user = verified;
+    try {
+        const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+        req.user = verified;
         next();
     } catch (error) {
         res.status(401).send({ message: "Invalid token.", error:`${error}` });
@@ -39,15 +43,13 @@ async function login(req, res, next) {
         if (match) {
             //save email in localstorage
             localStorage.setItem('email',email);
+            // Generate a random secret, this also invalidates previous login token
+            await generateSecret();
             // give some permissions
             const token = jwt.sign({
                 id: user.id,
-                email: user.email,
-                permissions: {
-                    view: true,
-                    update: true,
-                }
-            }, token_secret, { expiresIn:'3h'});
+                email: user.email
+            }, process.env.TOKEN_SECRET, { expiresIn:'3h'});
             res.status(200).header('auth-token', token).send({
                 message: "Login sucessful",
                 status: "sucess",
