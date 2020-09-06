@@ -10,14 +10,14 @@ async function missing(req, res, next){
 
          var fdate = "2020-07-31";
         var fromdate = moment(fdate).format('DD-MMM-YYYY');
-        
+        console.log(fromdate,typeof(fromdate));
         var tdate = new Date();
          var todate=moment(tdate).format('DD-MMM-YYYY');
 
          var data1=await attendanceschema.find();
          var temp=[];
+
          data1.forEach((record)=>{temp.push(record.empid)});
-        let length=temp.length;
 
         try{
 
