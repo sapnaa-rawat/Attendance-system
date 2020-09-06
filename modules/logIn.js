@@ -25,11 +25,6 @@ function validateToken(req, res, next) {
     }
 }
 
-function createToken(payload, secret){
-    var token = jwt.sign(payload, secret, { expiresIn:'1h'});
-    return token;
-}
-
 async function login(req, res, next) {
     var { email, password } = req.body;
     // null check
