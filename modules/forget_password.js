@@ -17,7 +17,7 @@ var transporter = nodemailer.createTransport({
 
 exports.forgot_Password = (req, res) => {
     var email = req.body.email;
-
+console.log(email)
     resources.findOne(email, (err, result) => {
       if (err) {
           return res.send(402, err);

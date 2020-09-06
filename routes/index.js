@@ -14,9 +14,9 @@ router.post('/login', loginHandler.login); //login user API
 
 router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
 
-router.post('/dailycheck',loginHandler.validateToken,checkAttendance.holiday,checkAttendance.validation,checkAttendance.attendance);
+router.get('/dailycheck',loginHandler.validateToken,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
 
-router.post('/markattendance',Attendance.markAttendance);
+router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail, Attendance.markAttendance);
 
 router.route("/forgot_Password").post(forget_password.forgot_Password);
 router.post('/markattendance',Attendance.markAttendance)
