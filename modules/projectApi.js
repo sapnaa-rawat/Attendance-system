@@ -2,7 +2,7 @@ const dataModel=require('../model/resource');
 const moment=require('moment');
 
 
-function deleteUser(req,res){
+function addUsertoProject(req,res){
     const currentuserid=req.body.id;
     dataModel.findOneAndUpdate({'id':currentuserid},{$set:{'project':true}}).exec(function(error){
         if(error){
@@ -13,5 +13,5 @@ function deleteUser(req,res){
 }
 
 module.exports={
-    deleteUser
+    addUsertoProject
 }

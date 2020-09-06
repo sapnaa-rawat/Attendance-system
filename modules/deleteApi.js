@@ -4,7 +4,7 @@ const moment=require('moment');
 
 function deleteUser(req,res){
     const currentuserid=req.body.id;
-    dataModel.findOneAndUpdate({'id':currentuserid},{$set:{'delete':true}}).exec(function(error){
+    dataModel.findOneAndUpdate({'id':currentuserid},{$set:{'deleted':true}}).exec(function(error){
         if(error){
             return res.status(404).send('something went wrong');
         }

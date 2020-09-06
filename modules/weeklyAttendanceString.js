@@ -48,7 +48,7 @@ async function weeklyAttendance(req, res, next) {
     //console.log(dateforsearch);
     if(dateforsearch==moment().format('DD-MMM-YYYY')){
     attendanceModel.findOne({
-            body
+        body
         }).exec(function(error,data){
             if(error){
                 return res.status(422).send("something went wrong");
@@ -58,9 +58,10 @@ async function weeklyAttendance(req, res, next) {
         
         
     }
+    
     for (let i = 0; i < 5; i++) {
         dbdata = await attendanceModel.findOne({
-            'empid': id,
+            'empid': req.body.id,
             'date': dateforsearch
         });
         temp.push(dbdata);
@@ -84,6 +85,5 @@ module.exports = {
     weeklyAttendance,
     is_notweekend,
     findIdfromemail,
-    authenticateToken
     //is_holiday
 }

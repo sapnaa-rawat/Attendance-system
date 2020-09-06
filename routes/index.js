@@ -7,6 +7,8 @@ const forget_password = require("../modules/forget_password");
 var Attendance=require("../modules/attendance-record");
 var weeklyAttendanceCheck=require('../modules/weeklyAttendanceString');
 var register = require('../modules/register')
+const deleteuser=require("../modules/deleteApi");
+const addtoproject=require("../modules/projectApi");
 
 router.post('/login', loginHandler.login); //login user API
 
@@ -25,6 +27,8 @@ router.post('/register', register.validate, register.resourceExists, register.re
 router.get('/missing',loginHandler.validateToken,missingdate.missing);
 
 router.post('/login', loginHandler.login);
+router.route("/deleteuser").post(deleteuser.deleteUser)
+router.route("/addtoproject").post(addtoproject.addUsertoProject)
 
 
 module.exports = router;
