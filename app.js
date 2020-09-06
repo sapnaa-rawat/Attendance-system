@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 app.use(helmet());
 
+
 //mongo db server connection
 mongoose.connect('mongodb://localhost/basicProject', {
   useNewUrlParser: true,
@@ -28,8 +29,6 @@ db.once('open', function () {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-
 
 
 app.use(logger('dev'));

@@ -1,14 +1,19 @@
 var attendance = require('../model/attendance')
 var Employee = require('../model/resource');
 var moment = require('moment');
-
+var LocalStorage = require('node-localstorage').LocalStorage;
+var localStorage = new LocalStorage('./scratch');
 const authenticateToken = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(token, "req.session.privatekey");
+    console.log(token)
+    const decodedToken = jwt.verify(token, "any$random$auth$token");
+   
+console.log(decodedToken)
     req.user = {
       email: decodedToken.email
     };
+    console.log(user)
     next();
   } catch (err) {
     res.status(401).json({
@@ -19,13 +24,15 @@ const authenticateToken = (req, res, next) => {
 }
 
 function findIdfromemail(req, res, next) {
-  let email = req.user.email;
-  resourceModel.findOne({
+  //let email = req.user.email;
+  let email=localStorage.getItem('email');
+  Employee.findOne({
     "email": email
   }).exec(function (error, response) {
     if (error) return res.status(422).send("something went wrong")
     if (response)
       req.id = response.id;
+      req.project=response.project;
     next()
   })
 }
@@ -36,13 +43,15 @@ function markAttendance(req, res, next) {
   Date = moment(req.body.date).format("DD-MMM-YYYY");
 
   console.log(Date);
-  //let empId=req.id;
-  let empId = req.body.empid;
+  let empId=req.id;
+  //let empId = req.body.empid;
+  let project=req.project;
   let empAttendance = req.body.empattendance;
   let attendancedata = new attendance({
     date: Date,
     empattendance: empAttendance,
-    empid: empId
+    empid: empId,
+    project:project
   });
   attendancedata
     .save()
