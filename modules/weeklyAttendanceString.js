@@ -1,7 +1,6 @@
 const express = require('express');
 const moment = require('moment')
 const resourceModel = require('../model/resource');
-const holidayModel = require('../model/holiday')
 const attendanceModel = require('../model/attendance');
 var LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage('./scratch');
@@ -9,6 +8,7 @@ var localStorage = new LocalStorage('./scratch');
 
 function findIdfromemail(req, res, next) {
     let email=localStorage.getItem('email');
+    console.log(email);
 
     resourceModel.findOne({
         "email": email
