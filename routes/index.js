@@ -23,8 +23,5 @@ router.post('/register', register.validate, register.resourceExists, register.re
 
 router.get('/missing',loginHandler.validateToken,missingdate.missing);
 
-router.post('/login', loginHandler.login);
-
-
 module.exports = router;
 // Attendance.authenticateToken,,  Attendance.findIdfromemail, Attendance.is_weekend
