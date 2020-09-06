@@ -17,6 +17,7 @@ var attendance = new Schema({
   },
   date: {
     type: Date,
+    type: String,
     require: true
   },
   project : false
