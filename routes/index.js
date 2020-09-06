@@ -24,8 +24,6 @@ router.post('/register', register.validate, register.resourceExists, register.re
 //loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,
 
 router.get('/missing',loginHandler.validateToken,missingdate.missing);
-
-router.post('/login', loginHandler.login);
 router.route("/deleteuser").post(deleteuser.deleteUser)
 router.route("/addtoproject").post(addtoproject.addUsertoProject)
 
