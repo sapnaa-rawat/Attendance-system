@@ -7,11 +7,12 @@ var localStorage = new LocalStorage('./scratch');
 const token_secret = "any$random$auth$token";
 
 function validateToken(req, res, next) {
-    const token = req.header('auth-token');
+  
+    const token = req.headers.authorization.split(" ")[1];
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
     }
-    try {
+    try {  console.log(token)
         const verified = jwt.verify(token, token_secret);
         //req.user = verified;
         next();
