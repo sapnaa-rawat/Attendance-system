@@ -18,9 +18,9 @@ router.post('/markattendance',Attendance.markAttendance);
 
 router.route("/forgot_Password").post(forget_password.forgot_Password);
 router.post('/markattendance',Attendance.markAttendance)
-router.route("/checkWeeklyAttendance").get(loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
+router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
-//,Attendance.authenticateToken,  Attendance.findIdfromemail
+//loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,
 
 router.get('/missing',loginHandler.validateToken,missingdate.missing);
 
