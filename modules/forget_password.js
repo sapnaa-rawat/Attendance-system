@@ -6,6 +6,7 @@ const saltRounds = 10;
 
 
 var transporter = nodemailer.createTransport({
+<<<<<<< HEAD
   service: "Gmail",
   host: "smtp.gmail.com",
   port: 587,
@@ -16,6 +17,17 @@ var transporter = nodemailer.createTransport({
     pass: "",
   }
 });
+=======
+    service: "Gmail",
+    host: "smtp-relay.gmail.com",
+    port: 465,
+    auth: {
+      user: "noreplymailed2020@gmail.com",
+      pass: "",
+    },
+    secure: true,
+  });
+>>>>>>> fa787e8f7230fcc3f15ce0f6f8d33268626b2855
 
 async function passhash(password) {
   const hashPass = await bcrypt.hash(password, saltRounds);
@@ -114,5 +126,9 @@ exports.change_Password = (req, res) => {
         });
       }
     });
+<<<<<<< HEAD
   }
 }
+=======
+  };
+>>>>>>> fa787e8f7230fcc3f15ce0f6f8d33268626b2855
