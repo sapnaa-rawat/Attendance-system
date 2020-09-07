@@ -42,15 +42,16 @@ function is_notweekend(req, res, next) {
 async function weeklyAttendance(req, res, next) {
     //let id = req.id;
     let body=req.body;
+    console.log(body)
     let id = req.id;
     let dateforsearch = req.body.date//moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
     let temp = [];
     let userdata = [];
-    console.log(dateforsearch);
     if(dateforsearch==moment().format('DD-MMM-YYYY')){
     attendanceModel.findOne({
-        'empid': req.body.id,
-        'date': dateforsearch
+        'empid': id,
+        'date': dateforsearch,
+        'project':true
         }).exec(function(error,data){
             if(error){
                 return res.status(422).send("something went wrong");
@@ -65,15 +66,16 @@ async function weeklyAttendance(req, res, next) {
     
     for (let i = 0; i < 5; i++) {
         dbdata = await attendanceModel.findOne({
-            'empid': req.body.id,
-            'date': dateforsearch
+            'empid': id,
+            'date': dateforsearch,
+            'project':true
         });
         temp.push(dbdata);
         dateforsearch = moment(dateforsearch).add(1, 'days').format('DD-MMM-YYYY')
 
     }
     
-    
+    console.log(temp)
     for (let iterator = 0; iterator < temp.length; iterator++) {
         if(temp[iterator]!=null){
             userdata.push(temp[iterator]);
