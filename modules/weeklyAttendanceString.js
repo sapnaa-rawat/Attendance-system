@@ -46,14 +46,17 @@ async function weeklyAttendance(req, res, next) {
     let dateforsearch = req.body.date//moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
     let temp = [];
     let userdata = [];
-    //console.log(dateforsearch);
+    console.log(dateforsearch);
     if(dateforsearch==moment().format('DD-MMM-YYYY')){
     attendanceModel.findOne({
-        body
+        'empid': req.body.id,
+        'date': dateforsearch
         }).exec(function(error,data){
             if(error){
                 return res.status(422).send("something went wrong");
             }
+            
+            console.log(data);
             return res.status(200).send(`your attendance on ${data.date} is ${data.empattendance}`)
         })
         
@@ -70,11 +73,14 @@ async function weeklyAttendance(req, res, next) {
 
     }
     
+    
     for (let iterator = 0; iterator < temp.length; iterator++) {
-        userdata.push(temp[iterator]);
+        if(temp[iterator]!=null){
+            userdata.push(temp[iterator]);
+        }
+        
     }
     
-    console.log(userdata)
     let tempdata = userdata.map(function (value, index, arr) {
         return `your attendance on ${moment(userdata[index].date).tz("Asia/Kolkata").format("DD-MMM-YYYY")} is ${userdata[index].empattendance}`;
     })
