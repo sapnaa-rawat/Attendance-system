@@ -18,7 +18,6 @@ router.get('/dailycheck',loginHandler.validateToken,checkAttendance.validation,c
 
 router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail, Attendance.markAttendance);
 
-router.route("/forgot_Password").post(forget_password.forgot_Password);
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 //loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,
@@ -29,4 +28,3 @@ router.route("/addtoproject").post(addtoproject.addUsertoProject)
 
 
 module.exports = router;
-// Attendance.authenticateToken,,  Attendance.findIdfromemail, Attendance.is_weekend
