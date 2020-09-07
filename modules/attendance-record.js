@@ -27,12 +27,14 @@ console.log(decodedToken)
 function findIdfromemail(req, res, next) {
   //let email = req.user.email;
   let email=localStorage.getItem('email');
+  console.log(email)
   Employee.findOne({
     "email": email
   }).exec(function (error, response) {
     if (error) return res.status(422).send("something went wrong")
     if (response)
       req.id = response.id;
+      
       req.project=response.project;
     next()
   })
@@ -44,16 +46,20 @@ function markAttendance(req, res, next) {
     let date = req.body.date;
     
     let empAttendance = req.body.empattendance;
+let id=req.id;
 
-       
+let project=req.project
     if (moment(date, 'DD-MMM-YYYY',true).isValid()){
 
          let attendancedata = new attendance({
       date: date,
       empattendance: empAttendance,
+      
+      empid:id,
+      project:project
     
     });
-    console.log("first")
+   
     attendancedata
       .save()
       .then((doc) => {
@@ -62,7 +68,7 @@ function markAttendance(req, res, next) {
           results: doc,
         });
         });
- console.log("firstttt")
+
     }
   
     else{
