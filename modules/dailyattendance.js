@@ -32,7 +32,7 @@ async function attendance(req, res, next) {
                 var result = await empattendance.find({ "date": date ,"project":true});
 
                 if (result.length === 0) {
-                    return res.status(400).json({ message: "attendance not filled" });
+                    return res.status(404).json({ message: "attendance not filled" });
                 }
                 var temp = [];
                 result.forEach(async function (key) {
@@ -44,7 +44,7 @@ async function attendance(req, res, next) {
             var result = await empattendance.find({"empid": empid ,"date":date});
 
             if (result.length === 0) {
-                return res.status(400).json({ message: "attendance not filled" });
+                return res.status(404).json({ message: "attendance not filled" });
             }
            console.log(result)
                 res.status(200).json({ "empid":result[0].empid, "status":result[0].empattendance, "date":result[0].date });
