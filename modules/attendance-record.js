@@ -1,6 +1,7 @@
 var attendance = require('../model/attendance')
 var Employee = require('../model/resource');
 var moment = require('moment');
+const { Date } = require('mongoose');
 var LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage('./scratch');
 const authenticateToken = (req, res, next) => {
@@ -38,34 +39,40 @@ function findIdfromemail(req, res, next) {
 }
 
 function markAttendance(req, res, next) {
-  //console.log(req.body);
-  let Date = req.body.date;
-  //console.log(Date);
-  let empId=req.id;
-  //let empId = req.body.empid;
-  let project=req.project;
-  let empAttendance = req.body.empattendance;
-  Date = moment(req.body.date).format("DD-MMM-YYYY");
-  let attendancedata = new attendance({
-    date: Date,
-    empattendance: empAttendance,
-    empid: empId,
-    project:project
-  });
-  attendancedata
-    .save()
-    .then((doc) => {
-      res.status(200).json({
-        message: "attendance marked successfully",
-        results: doc,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({
-        message: "not marked"
-      });
+  try{
+   // console.log(req.body)
+    let date = req.body.date;
+    
+    let empAttendance = req.body.empattendance;
+
+       
+    if (moment(date, 'DD-MMM-YYYY',true).isValid()){
+
+         let attendancedata = new attendance({
+      date: date,
+      empattendance: empAttendance,
+    
     });
+    console.log("first")
+    attendancedata
+      .save()
+      .then((doc) => {
+        res.status(200).json({
+          message: "attendance marked successfully",
+          results: doc,
+        });
+        });
+ console.log("firstttt")
+    }
+  
+    else{
+      res.status(404).json({ message: "invalid Date" })
+    }
+  }
+  
+catch(error){
+  res.status(404).json({ message: "not marked",error })
+}
 }
 
 function is_weekend(req, res, next) {
