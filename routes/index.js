@@ -18,8 +18,8 @@ router.post('/change_Password', forget_password.change_Password);
 
 router.get('/dailycheck',loginHandler.validateToken,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
 
-router.post('/markattendance', Attendance.markAttendance);
-//,loginHandler.validateToken,  Attendance.findIdfromemail
+router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail ,Attendance.markAttendance);
+//
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
 
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
