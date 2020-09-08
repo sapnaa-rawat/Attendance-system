@@ -9,6 +9,8 @@ var weeklyAttendanceCheck = require('../modules/weeklyAttendanceString');
 var register = require('../modules/register')
 const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
+var leaves = require('../modules/leaves');
+const { login } = require('../modules/logIn');
 
 router.post('/login', loginHandler.login); //login user API
 
@@ -30,5 +32,8 @@ router.route("/deleteuser").post(deleteuser.deleteUser);
 
 router.route("/addtoproject").post(addtoproject.addUsertoProject);
 
+router.post('/applyleave', loginHandler.validateToken, leaves.applyLeave);
+
+router.get('/leaves',loginHandler.validateToken , leaves.getAll);
 
 module.exports = router;
