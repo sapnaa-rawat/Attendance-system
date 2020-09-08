@@ -11,6 +11,21 @@ async function generateSecret() {
     return randomSecret;
 }
 
+//finds all employees involved in a project
+async function findEmpInProject() {
+    var empsAllDetails = await resource.find({project:true, deleted:false});
+    var emps = await empsAllDetails.map((value,index)=>{
+        return {
+            name:value.name,
+            email:value.email,
+            id:value.id,
+            technology:value.technology,
+            designation:value.designation
+        }
+    });
+    return emps;
+}
+
 function validateToken(req, res, next) {
     const token = req.header('auth-token') || req.headers.authorization.split(" ")[1];
     if (!token) {
@@ -46,15 +61,21 @@ async function login(req, res, next) {
                 localStorage.setItem('email', email);
                 // Generate a random secret, this also invalidates previous login token
                 await generateSecret();
-                // give some permissions
+                // sign JWT token
                 const token = jwt.sign({
                     id: user.id,
                     email: user.email
                 }, process.env.TOKEN_SECRET, { expiresIn: '3h' });
+                //Get employees in a project
+                var empsInProject = await findEmpInProject();
+                if(empsInProject.length===0){
+                    empsInProject = "Currently no employees in a project.";
+                }
+                console.log(empsInProject);
                 res.status(200).header('auth-token', token).send({
                     message: "Login sucessful",
-                    status: "sucess",
-                    token: token
+                    token: token,
+                    employees: empsInProject
                 });
             }
             else {

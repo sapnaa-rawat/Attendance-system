@@ -43,7 +43,7 @@ async function weeklyAttendance(req, res, next) {
     //let id = req.id;
     let body=req.body;
     console.log(body)
-    let id = req.id;
+    let id = req.body.id;
     let dateforsearch = req.body.date//moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
     let temp = [];
     let userdata = [];
@@ -75,7 +75,7 @@ async function weeklyAttendance(req, res, next) {
 
     }
     
-    console.log(temp)
+    
     for (let iterator = 0; iterator < temp.length; iterator++) {
         if(temp[iterator]!=null){
             userdata.push(temp[iterator]);
@@ -86,8 +86,14 @@ async function weeklyAttendance(req, res, next) {
     let tempdata = userdata.map(function (value, index, arr) {
         return `your attendance on ${moment(userdata[index].date).tz("Asia/Kolkata").format("DD-MMM-YYYY")} is ${userdata[index].empattendance}`;
     })
-   
-    return res.status(200).send(tempdata);
+    
+    if(tempdata && tempdata.length){
+        return res.status(200).send(tempdata);
+    }
+    else{
+        return res.status(200).send("attendance not marked for this week");
+    }
+    
 }
 
 module.exports = {
