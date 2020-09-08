@@ -33,7 +33,7 @@ function findIdfromemail(req, res, next) {
   //let email = req.user.email;
   let email = localStorage.getItem('email');
   console.log(email)
-  Employee.findOne({
+  resources .findOne({
     "email": email
   }).exec(function (error, response) {
     if (error) return res.status(422).send("something went wrong")
@@ -60,7 +60,7 @@ function markAttendance(req, res) {
     } else {
       
       result.map((data)=>{
-        console.log(data);
+       
         body.map((item) => {
           if(data.id == item.empid){
             console.log(item);
