@@ -18,7 +18,7 @@ router.post('/change_Password', loginHandler.validateToken, forget_password.chan
 
 router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', loginHandler.validateToken, Attendance.findIdfromemail, Attendance.markAttendance);
+router.post('/markattendance', Attendance.markAttendance);
 
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.findIdfromemail, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
