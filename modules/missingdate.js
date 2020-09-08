@@ -7,6 +7,7 @@ async function missing(req, res, next){
     var holidays=['03-aug-2020', '02-oct-2020', '13-nov-2020', '30-nov-2020', '25-dec-2020'];
     var missingdates=[];
     var key2=false;
+    var ids=[];
 
          var fdate = "2020-07-31";
         var fromdate = moment(fdate).format('DD-MMM-YYYY');
@@ -23,8 +24,11 @@ async function missing(req, res, next){
         try{
 
             for(start=0; start<temp.length; start++)
-            {
+           if(temp[start]!==temp[start-1]) {
                 idemp=temp[start];
+                if(id===undefined){
+missingdates.push({"empid":idemp})
+                }
                 for (var m = moment(fromdate); m.isSameOrBefore(todate); m.add(1, 'days')) {
                     var hd=null;
                     let key=false;
@@ -46,7 +50,7 @@ async function missing(req, res, next){
                             var data=await attendanceschema.findOne({$and:[{empid: id, date:m.format("DD-MMM-YYYY")}]});
                                 if(data==null){
                                 var obj = {};
-                                obj[id]=m.format('DD-MMM-YYYY')
+                                obj=m.format('DD-MMM-YYYY')
                                 missingdates.push(obj);
                                 }
                             }
@@ -56,7 +60,7 @@ async function missing(req, res, next){
                                    var data=await attendanceschema.find({$and:[{empid: idemp,project:true, date:m.format("DD-MMM-YYYY")}]});
                                    if(data.length==0){
                                         var obj = {};
-                                        obj[idemp]=m.format('DD-MMM-YYYY')
+                                        obj=m.format('DD-MMM-YYYY')
                                         missingdates.push(obj);            
                                         }
                              }
@@ -66,8 +70,8 @@ async function missing(req, res, next){
             }
             key2=true;
         }
-                console.log(missingdates);
-                res.status(200).json({"empid":missingdates});
+               
+                res.status(200).json({AttendancesMissing:{"date":missingdates,"empid":id}});
             
         }
         catch(err){
