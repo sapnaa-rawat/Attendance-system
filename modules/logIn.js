@@ -5,10 +5,25 @@ var LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage('./scratch');
 var crypto = require('crypto');
 
-async function generateSecret(){
+async function generateSecret() {
     const randomSecret = await crypto.randomBytes(32).toString('hex');
     process.env.TOKEN_SECRET = randomSecret;
     return randomSecret;
+}
+
+//finds all employees involved in a project
+async function findEmpInProject() {
+    var empsAllDetails = await resource.find({project:true, deleted:false});
+    var emps = await empsAllDetails.map((value,index)=>{
+        return {
+            name:value.name,
+            email:value.email,
+            id:value.id,
+            technology:value.technology,
+            designation:value.designation
+        }
+    });
+    return emps;
 }
 
 function validateToken(req, res, next) {
@@ -21,7 +36,7 @@ function validateToken(req, res, next) {
         req.user = verified;
         next();
     } catch (error) {
-        res.status(401).send({ message: "Invalid token.", error:`${error}` });
+        res.status(401).send({ message: "Invalid token.", error: `${error}` });
     }
 }
 
@@ -31,37 +46,45 @@ async function login(req, res, next) {
     if (email.length === 0) {
         res.status(400).send({ message: "Please provide an email." })
     }
-    if (password.length === 0) {
+    else if (password.length === 0) {
         res.status(400).send({ message: "Please provide a password." })
     }
 
-    try {
-        const user = await resource.findOne({ email: email });
-        const hashed_pass = user.password;
-        const match = await bcrypt.compare(password, hashed_pass);
+    else {
+        try {
+            const user = await resource.findOne({ email: email });
+            const hashed_pass = user.password;
+            const match = await bcrypt.compare(password, hashed_pass);
 
-        if (match) {
-            //save email in localstorage
-            localStorage.setItem('email',email);
-            // Generate a random secret, this also invalidates previous login token
-            await generateSecret();
-            // give some permissions
-            const token = jwt.sign({
-                id: user.id,
-                email: user.email
-            }, process.env.TOKEN_SECRET, { expiresIn:'3h'});
-            res.status(200).header('auth-token', token).send({
-                message: "Login sucessful",
-                status: "sucess",
-                token:token
-            });
+            if (match) {
+                //save email in localstorage
+                localStorage.setItem('email', email);
+                // Generate a random secret, this also invalidates previous login token
+                await generateSecret();
+                // sign JWT token
+                const token = jwt.sign({
+                    id: user.id,
+                    email: user.email
+                }, process.env.TOKEN_SECRET, { expiresIn: '3h' });
+                //Get employees in a project
+                var empsInProject = await findEmpInProject();
+                if(empsInProject.length===0){
+                    empsInProject = "Currently no employees in a project.";
+                }
+                console.log(empsInProject);
+                res.status(200).header('auth-token', token).send({
+                    message: "Login sucessful",
+                    token: token,
+                    employees: empsInProject
+                });
+            }
+            else {
+                res.status(400).send({ message: "Invalid password." });
+            }
         }
-        else {
-            res.status(400).send({ message: "Invalid password." });
+        catch (err) {
+            res.status(404).send({ message: "No such user.", error: `${err}` });
         }
-    }
-    catch (err) {
-        res.status(404).send({ message: "No such user.", error: `${err}` });
     }
 }
 
