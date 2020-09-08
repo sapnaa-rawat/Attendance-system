@@ -1,8 +1,5 @@
 var leaves = require('../model/leavesModel');
 var resource = require('../model/resource');
-const { model } = require('../model/resource');
-var LocalStorage = require('node-localstorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
 
 async function applyLeave(req, res) {
     const day = req.body.date;
