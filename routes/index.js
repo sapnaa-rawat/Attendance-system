@@ -10,7 +10,6 @@ var register = require('../modules/register')
 const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
 var leaves = require('../modules/leaves');
-const { login } = require('../modules/logIn');
 
 router.post('/login', loginHandler.login); //login user API
 
