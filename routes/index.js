@@ -31,6 +31,8 @@ router.route("/deleteuser").post(deleteuser.deleteUser);
 
 router.route("/addtoproject").post(addtoproject.addUsertoProject);
 
-router.get('/leaves',loginHandler.validateToken , leaves.getLeaveOnDate);
+router.get('/dailyleaves',loginHandler.validateToken , leaves.getLeaveOnDate);
+
+router.get('/weeklyleaves', loginHandler.validateToken, weeklyAttendanceCheck.is_notweekend, leaves.getWeeklyLeaves);
 
 module.exports = router;
