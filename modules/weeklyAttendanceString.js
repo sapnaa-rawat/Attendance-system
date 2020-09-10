@@ -55,7 +55,17 @@ async function weeklyAttendance(req, res, next) {
     let result = userdata.map(docval => {
         return { "date": moment(docval.date).format("DD-MMM-YYYY"), "attendance": docval.empattendance }
     });
-    return res.status(200).send(result);
+    // filter results, remove dates after enddate
+    let f_result = result.filter((val)=>{
+        var _date = moment(val.date); // deprication warning
+        if(_date.isBefore(enddate)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    });
+    return res.status(200).send(f_result);
 }
 
 module.exports = {

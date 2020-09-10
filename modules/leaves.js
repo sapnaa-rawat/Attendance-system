@@ -22,7 +22,19 @@ async function getLeavesFrom(id, sdate, days) {
         return [];
     }
     var result = leavesList.map(key => { return { "empid": key.empid, "leave": key.empattendance, "date": key.date } });
-    return result;
+    // make sure all dates fall in the range between sdate and date_end
+    var filtered_result = result.filter(val=>{
+        let d = moment(val.date);
+        let sd = moment(sdate).subtract(1,'day');
+        let ed = moment(date_end);
+        if(d.isBefore(ed) && d.isAfter(sd)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    });
+    return filtered_result;
 }
 
 function dateIsValid(req, res, next) {
@@ -42,17 +54,6 @@ function dateIsValid(req, res, next) {
 function dateIsMonday(req, res, next) {
     var date = moment(req.body.date);
     var week = date.day();
-    if (week === 1) {
-        next();
-    }
-    else {
-        return res.status(200).json({ message: "Date is not the start of a week." });
-    }
-}
-
-function startDateOfMonth(req, res, next) {
-    var date = moment(req.body.date);
-    var week = date.month();
     if (week === 1) {
         next();
     }
@@ -87,10 +88,21 @@ async function getWeeklyLeaves(req, res) {
 }
 
 async function getmonthlyLeaves(req, res) {
-    const date = moment(req.body.date);
+    const d = new Date();
     const id = req.body.id;
-    // const days = 
-    var result = await getLeavesFrom(id, date.format('DD-MMM-YYYY'), 31);
+    const month = req.body.month || d.getMonth();
+    const year = d.getFullYear();
+    if(!month){
+        return res.status(400).json({message:"month not provided"});
+    }
+    // strating date of month
+    const sdate = moment([year,month]);
+    // days in month
+    const days = sdate.daysInMonth();
+    // get leaves of the month
+    console.log(sdate.format('DD-MMM-YYYY'));
+    console.log(days);
+    var result = await getLeavesFrom(id, sdate.format('DD-MMM-YYYY'), days-1);
     if (result.length === 0) {
         res.status(404).json({ message: "No leaves record found" });
     }
