@@ -35,4 +35,6 @@ router.get('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leave
 
 router.get('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
+router.get('/monthlyleaves', leaves.getmonthlyLeaves);
+
 module.exports = router;
