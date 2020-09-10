@@ -3,7 +3,7 @@ var resource = require('../model/resource');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var LocalStorage = require('node-localstorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
+var localStorage = new LocalStorage('./scratch');  // RECOMMENDED NOT TO USE !!
 var crypto = require('crypto');
 
 async function generateSecret() {

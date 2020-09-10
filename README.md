@@ -3,15 +3,18 @@ A system to manage attendance of employees in a company.
 
 # API Documentation
 
- 1. [Register Resource](#Register-Resource)
- 2. [Login](#Login)
- 3. [Forgot Password](#Forgot-Password)
- 4. [Mark Attendance](#Mark-Attendance)
- 5. [Add Project](#Add-Project)
- 6. [Daily Attendance](#Daily-Attendance)
- 7. [Weekly Attendance](#Weekly-Attendance)
- 8. [Missing Attendance](#Missing-Attendance)
- 9. [Delete Resource](#Delete-Resource)
+1. [Register Resource](#Register-Resource)
+2. [Login](#Login)
+3. [Forgot Password](#Forgot-Password)
+4. [Mark Attendance](#Mark-Attendance)
+5. [Add Project](#Add-Project)
+6. [Daily Attendance](#Daily-Attendance)
+7. [Weekly Attendance](#Weekly-Attendance)
+8. [Missing Attendance](#Missing-Attendance)
+9. [Daily Leaves](#Daily-Leaves])
+10. [Weekly Leaves](#Weekly-Leaves)
+11. [Monthly Leaves](#Monthly-Leaves) 
+12. [Delete Resource](#Delete-Resource)
 
 ## Register Resource
 
@@ -57,7 +60,7 @@ Change your password.
 
 ## Mark Attendance
 
-Mark user's attendance for a given date.
+Mark/update user attendance for a given date. Multiple user data can be sent at once. Data is given as an array of objects.
 
 **Route Path**
 `POST@ /markattendance`
@@ -65,6 +68,7 @@ Mark user's attendance for a given date.
 |Parameter| Type |
 |--|--|
 | date | `Date` |
+| empid | `Number` |
 | empattendance | `String` - `['p', 'PNB', 'PL', 'UPL', 'HD', 'H', 'OH', 'WFH', 'UCL', 'PCL']` |
 
 ## Add Project
@@ -81,14 +85,14 @@ Sets the *resource* project field to `true`.
 
 ## Daily Attendance
 
-Get a list of the daily attendance of a *resource*.
+Get a list of the daily attendance of a *resource*. If `id` is not given. Finds records of all users for that date who were involved in a project.
 
 **Route Path**
 `GET@ /dailycheck`
 
 |Parameter| Type |
 |--|--|
-| empid | `Number` |
+| empid | `Number` (Optional) |
 | date | `Date` |
 
 ## Weekly Attendance
@@ -113,6 +117,46 @@ Get a list of dates for which *resource* is missing attendance.
 |Parameter| Type |
 |--|--|
 | empid | `Number` |
+
+## Daily Leaves
+
+Get _resource_ details who applied for a leave on a date.
+If no `id` is given, fetches details of all _resources_ for that date.
+
+**Route Path**
+`GET@ /dailyleaves`
+
+|Parameter| Type |
+|--|--|
+| date |  `Date`  |
+| empid |  `Number` (optional)  |
+
+## Weekly Leaves
+
+Get _resource_ details who applied for a leave in a week interval.
+If no `id` is given, fetches details of all _resources_ for that week.
+
+**Route Path**
+`GET@ /weeklyleaves`
+
+|Parameter| Type |
+|--|--|
+| date |  `Date`  |
+| empid |  `Number` (optional)  |
+
+## Monthly Leaves
+
+Get _resource_ details who applied for a leave in a given month.
+If no `id` is given, fetches details of all _resources_ for that month.
+If no `month` is given, defaults to current month.
+
+**Route Path**
+`GET@ /monthlyleaves`
+
+|Parameter| Type |
+|--|--|
+| month |  `Number` (optional)  |
+| empid |  `Number` (optional)  |
 
 ## Delete Resource
 
