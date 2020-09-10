@@ -71,7 +71,6 @@ async function login(req, res, next) {
                 if(empsInProject.length===0){
                     empsInProject = "Currently no employees in a project.";
                 }
-                console.log(empsInProject);
                 res.status(200).header('auth-token', token).send({
                     message: "Login sucessful",
                     token: token,
