@@ -61,20 +61,23 @@ function markAttendance(req, res) {
 }
 
 
-/*
 
+/*
 function is_weekend(req, res, next) {
   let dateforsearch = req.body.date;
   var dt = new Date(dateforsearch);
   var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
+  console.log(verifyDate,"heyyy")
 
-  if ( dt.getDay() == 0 && dt.getDay() == 6 && verifyDate == true) {
-    return res.send(holiday);
+
+  if ( dt.getDay() == 0 && dt.getDay() == 6 && verifyDate ==true) {
+    console.log(dt)
+    return res.send("holiday");
   }
   else {
-    return res.status(422).send({
-        msg: 'not a valid date to find attendance of whole week'
-    });
+    
+        next()
+ 
 }
 
 }*/
@@ -84,3 +87,5 @@ module.exports = {
  
   //is_weekend
 }
+
+
