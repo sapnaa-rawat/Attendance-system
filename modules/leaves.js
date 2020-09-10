@@ -22,7 +22,8 @@ async function getLeavesFrom(id, sdate, days) {
         return [];
     }
     var result = leavesList.map(key => { return { "empid": key.empid, "leave": key.empattendance, "date": key.date } });
-    return result;
+    var filtered_result = result.filter(val=>moment(val.date).isBefore(moment(date_end)));
+    return filtered_result;
 }
 
 function dateIsValid(req, res, next) {
