@@ -34,6 +34,7 @@ function validateToken(req, res, next) {
     try {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET);
         req.user = verified;
+        console.log(req.user);
         next();
     } catch (error) {
         res.status(401).send({ message: "Invalid token.", error: `${error}` });
@@ -71,7 +72,6 @@ async function login(req, res, next) {
                 if(empsInProject.length===0){
                     empsInProject = "Currently no employees in a project.";
                 }
-                console.log(empsInProject);
                 res.status(200).header('auth-token', token).send({
                     message: "Login sucessful",
                     token: token,

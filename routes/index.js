@@ -9,6 +9,7 @@ var weeklyAttendanceCheck = require('../modules/weeklyAttendanceString');
 var register = require('../modules/register')
 const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
+var leaves = require('../modules/leaves');
 
 router.post('/login', loginHandler.login); //login user API
 
@@ -18,7 +19,7 @@ router.post('/change_Password', loginHandler.validateToken, forget_password.chan
 
 router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', Attendance.markAttendance);
+router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail, Attendance.markAttendance);
 
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.findIdfromemail, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
@@ -30,5 +31,8 @@ router.route("/deleteuser").post(deleteuser.deleteUser);
 
 router.route("/addtoproject").post(addtoproject.addUsertoProject);
 
+router.post('/applyleave', loginHandler.validateToken, leaves.applyLeave);
+
+router.get('/leaves',loginHandler.validateToken , leaves.getAll);
 
 module.exports = router;

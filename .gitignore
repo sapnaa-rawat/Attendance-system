@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 # Session storage files
-scratch/*
+/scratch
