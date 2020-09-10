@@ -76,39 +76,38 @@ function is_notweekend(req, res, next) {
 } */
 
 async function weeklyAttendance(req, res, next) {
-    //let id = req.id;
     let id = req.body.id;
     let dateforsearch = moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
-    let temp = [];
-    let userdata = [];
-    //console.log(dateforsearch);
-    /* if(dateforsearch==moment().format('DD-MMM-YYYY')){
-        dbdata = await attendanceModel.findOne({
-            'empid': id,
-            'date': new Date(dateforsearch)
-        });
-        return res.status(200).send(`your attendance on ${dbdata.date} is ${dbdata.empattendance}`);
-    } */
-    for (let i = 0; i < 6; i++) {
-        dbdata = await attendanceModel.findOne({
-            'empid': id,
-            'date': new Date(dateforsearch)
-        });
-        temp.push(dbdata);
-        dateforsearch = moment(dateforsearch).add(1, 'days').format('DD-MMM-YYYY')
 
-    }
+    console.log(">>>>>",id, dateforsearch);
+
+    res.send("ok");
+
+    // let temp = [];
+    // let userdata = [];
+
+    // for (let i = 0; i < 6; i++) {
+    //     dbdata = await attendanceModel.findOne({
+    //         'empid': id,
+    //         'date': new Date(dateforsearch)
+    //     });
+    //     temp.push(dbdata);
+    //     dateforsearch = moment(dateforsearch).add(1, 'days').format('DD-MMM-YYYY')
+
+    // }
     //console.log(temp)
-    for (let iterator = 1; iterator < temp.length; iterator++) {
-        userdata.push(temp[iterator]);
-    }
-    console.log(userdata);
 
-    let tempdata = userdata.map(function (value, index, arr) {
-        return `your attendance on ${moment(userdata[index].date).tz("Asia/Kolkata").format("DD-MMM-YYYY")} is ${userdata[index].empattendance}`;
-    })
-    console.log(tempdata);
-    return res.status(200).send(tempdata);
+
+    // for (let iterator = 1; iterator < temp.length; iterator++) {
+    //     userdata.push(temp[iterator]);
+    // }
+    // console.log(userdata);
+
+    // let tempdata = userdata.map(function (value, index, arr) {
+    //     return `your attendance on ${moment(userdata[index].date).tz("Asia/Kolkata").format("DD-MMM-YYYY")} is ${userdata[index].empattendance}`;
+    // })
+    // console.log(tempdata);
+    // return res.status(200).send(tempdata);
 }
 
 module.exports = {

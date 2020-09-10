@@ -1,9 +1,9 @@
-var moment = require("moment")
+var moment = require("moment");
 var empattendance = require("../model/attendance");
 const { json } = require("body-parser");
+const constants = require("./constants");
 
 
-var array = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
 function validation(req, res, next) {
     var date = req.body.date;
 
@@ -62,7 +62,7 @@ function holiday(req, res, next) {
     var date = req.body.date;
 
 
-   array.forEach(key=>{if (key == date) {
+   constants.constant_Data.HOLIDAYS_DATE.forEach(key=>{if (key == date) {
 
     res.status(200).json({ message: "mandatory holiday" })
 

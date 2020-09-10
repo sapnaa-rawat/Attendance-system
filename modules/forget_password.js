@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const resources = require("../model/resource");
+const constants = require("./constants");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -46,15 +47,11 @@ exports.forgot_Password = (req, res) => {
           return res.send(err);
         } else {
 
-          var constant_message = {
-            Forget_body_mail: "Hi {name},<br><br> Here is the new password- <b>{password}</b><br><br>If password reset wasn’t intended: If you didn't make the request, just ignore this email.<br><br>Thanks <br><br>"
-          }
-
           const message = {
-            from: "noreplymailed2020@gmail.com", // Sender address
+            from: constants.constant_Data.SENDER_MAIL_ID, // Sender address
             to: email, // List of recipients
-            subject: "Reset password", // Subject line
-            html: constant_message.Forget_body_mail.replace("{name}", name).replace("{password}", new_password) // Plain text body
+            subject: constants.constant_Data.SUBJECT_RESET_PASSWORD, // Subject line
+            html: constants.constant_Data.FORGET_BODY_MAIL.replace("{name}", name).replace("{password}", new_password) // Plain text body
           };
           transporter.sendMail(message, function (err, info) {});
           res.send(200, {
@@ -92,15 +89,11 @@ exports.change_Password = (req, res) => {
             return res.send(err);
           } else {
 
-            var constant_message = {
-              Changed_password_body_mail: "Hi {name},<br><br> Here is the updated password- <b>{password}</b><br><br>Thanks <br><br>"
-            }
-
             const message = {
-              from: "noreplymailed2020@gmail.com", // Sender address
+              from: constants.constant_Data.SENDER_MAIL_ID, // Sender address
               to: email, // List of recipients
-              subject: "Password Changed", // Subject line
-              html: constant_message.Changed_password_body_mail.replace("{name}", name).replace("{password}", new_password) // Plain text body
+              subject: constants.constant_Data.SUBJECT_CHANGED_PASSWORD, // Subject line
+              html: constants.constant_Data.CHANGED_PASSWORD_BODY_MAIL.replace("{name}", name).replace("{password}", new_password) // Plain text body
             };
             transporter.sendMail(message, function (err, info) {});
             res.send(200, {
