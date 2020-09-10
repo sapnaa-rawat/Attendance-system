@@ -1,3 +1,4 @@
+  
 var resource = require('../model/resource');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
