@@ -21,8 +21,8 @@ router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation
 
 router.post('/markattendance', loginHandler.validateToken, Attendance.markAttendance);
 // Attendance.is_weekend,
-router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.weeklyAttendance);
-//loginHandler.validateToken, weeklyAttendanceCheck.findIdfromemail, weeklyAttendanceCheck.is_notweekend, 
+router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
+
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 
 router.get('/missedattendance', loginHandler.validateToken, missingdate.missing);

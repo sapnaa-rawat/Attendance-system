@@ -1,24 +1,5 @@
-const express = require('express');
 const moment = require('moment-timezone')
-const resourceModel = require('../model/resource');
 const attendanceModel = require('../model/attendance');
-var LocalStorage = require('node-localstorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
-
-
-function findIdfromemail(req, res, next) {
-    let email=localStorage.getItem('email');
-    console.log(email);
-
-    resourceModel.findOne({
-        "email": email
-    }).exec(function (error, response) {
-        if (error) return res.status(422).send("something went wrong")
-        if (response)
-            req.id = response.id;
-        next()
-    })
-}
 
 function is_notweekend(req, res, next) {
     let dateforsearch = req.body.date;
@@ -37,68 +18,48 @@ function is_notweekend(req, res, next) {
 
 }
 
-
-
 async function weeklyAttendance(req, res, next) {
     //let id = req.id;
-    let body=req.body;
+    let body = req.body;
     console.log(body)
     let id = req.body.id;
     let dateforsearch = req.body.date//moment(req.body.date).tz("Asia/Kolkata").format("DD-MMM-YYYY");
-    let temp = [];
-    let userdata = [];
-    if(dateforsearch==moment().format('DD-MMM-YYYY')){
-    attendanceModel.findOne({
-        'empid': id,
-        'date': dateforsearch,
-        'project':true
-        }).exec(function(error,data){
-            if(error){
+    if (dateforsearch == moment().format('DD-MMM-YYYY')) {
+        attendanceModel.findOne({
+            'empid': id,
+            'date': dateforsearch,
+            'project': true
+        }).exec(function (error, data) {
+            if (error) {
                 return res.status(422).send("something went wrong");
             }
-            
+
             console.log(data);
             return res.status(200).send(`your attendance on ${data.date} is ${data.empattendance}`)
         })
-        
-        
     }
-    
-    for (let i = 0; i < 5; i++) {
-        dbdata = await attendanceModel.findOne({
-            'empid': id,
-            'date': dateforsearch,
-            'project':true
-        });
-        temp.push(dbdata);
-        dateforsearch = moment(dateforsearch).add(1, 'days').format('DD-MMM-YYYY')
+    // ******** Getting rid of loop ******** //
+    // end date is non inclusive (because of using $lt and not $lte), so add 6 instead of 5
+    const enddate = moment(dateforsearch).add(6, 'days').format('DD-MMM-YYYY');
 
+    var userdata = await attendanceModel.find({
+        'empid': id,
+        'date': { $gte: dateforsearch, $lt: enddate },
+        'project': true
+    }).sort({ date: 1 });
+
+    if (userdata.length === 0) {
+        return res.status(200).json({ message: "attendance not marked for this week" });
     }
-    
-    
-    for (let iterator = 0; iterator < temp.length; iterator++) {
-        if(temp[iterator]!=null){
-            userdata.push(temp[iterator]);
-        }
-        
-    }
-    
-    let tempdata = userdata.map(function (value, index, arr) {
-        return `your attendance on ${moment(userdata[index].date).tz("Asia/Kolkata").format("DD-MMM-YYYY")} is ${userdata[index].empattendance}`;
-    })
-    
-    if(tempdata && tempdata.length){
-        return res.status(200).send(tempdata);
-    }
-    else{
-        return res.status(200).send("attendance not marked for this week");
-    }
-    
+    // presenting the date in a nice way
+    let result = userdata.map(docval => {
+        return { "date": moment(docval.date).format("DD-MMM-YYYY"), "attendance": docval.empattendance }
+    });
+    return res.status(200).send(result);
 }
 
 module.exports = {
     weeklyAttendance,
-    is_notweekend,
-    findIdfromemail,
+    is_notweekend
     //is_holiday
 }
