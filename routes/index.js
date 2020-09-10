@@ -9,6 +9,7 @@ var weeklyAttendanceCheck = require('../modules/weeklyAttendanceString');
 var register = require('../modules/register')
 const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
+var leaves = require('../modules/leaves');
 
 router.post('/login', loginHandler.login); //login user API
 
@@ -18,8 +19,8 @@ router.post('/change_Password', loginHandler.validateToken, forget_password.chan
 
 router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail, Attendance.markAttendance);
-
+router.post('/markattendance', loginHandler.validateToken, Attendance.markAttendance);
+// Attendance.is_weekend,
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.findIdfromemail, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
@@ -30,5 +31,8 @@ router.route("/deleteuser").post(deleteuser.deleteUser);
 
 router.route("/addtoproject").post(addtoproject.addUsertoProject);
 
+router.get('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.getLeaveOnDate);
+
+router.get('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
 module.exports = router;
