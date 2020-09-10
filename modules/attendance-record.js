@@ -16,9 +16,12 @@ function markAttendance(req, res) {
     if (err) {
       return err
     } else {
+      console.log(result);
       result.map((data) => {
+        console.log(">>>>>>>>>",data);
         body.map((item) => {
           if (data.id == item.empid) {
+            console.log("#######",data.id, "==", item.empid);
             attendance.find({
               "empid": data.id,
               "date": item.date
@@ -40,7 +43,7 @@ function markAttendance(req, res) {
                   .save((err) => {
                     if (err) {
                       return res.send(404, {
-                        message: "Not Found"
+                        message: "Not Found", err
                       })
                     }
                   })
