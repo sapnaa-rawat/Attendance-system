@@ -22,7 +22,18 @@ async function getLeavesFrom(id, sdate, days) {
         return [];
     }
     var result = leavesList.map(key => { return { "empid": key.empid, "leave": key.empattendance, "date": key.date } });
-    var filtered_result = result.filter(val=>moment(val.date).isBefore(moment(date_end)));
+    // make sure all dates fall in the range between sdate and date_end
+    var filtered_result = result.filter(val=>{
+        let d = moment(val.date);
+        let sd = moment(sdate).subtract(1,'day');
+        let ed = moment(date_end);
+        if(d.isBefore(ed) && d.isAfter(sd)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    });
     return filtered_result;
 }
 
