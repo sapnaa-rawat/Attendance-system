@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const resources = require("../model/resource");
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 
@@ -17,7 +17,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-async function passhash(password) {
+var passhash = async (password) => {
   const hashPass = await bcrypt.hash(password, saltRounds);
   return hashPass;
 }
@@ -56,7 +56,7 @@ exports.forgot_Password = (req, res) => {
             subject: "Reset password", // Subject line
             html: constant_message.Forget_body_mail.replace("{name}", name).replace("{password}", new_password) // Plain text body
           };
-          transporter.sendMail(message, function (err, info) {});
+          transporter.sendMail(message, function (err, info) { });
           res.send(200, {
             msg: "password mail send"
           });
@@ -102,7 +102,7 @@ exports.change_Password = (req, res) => {
               subject: "Password Changed", // Subject line
               html: constant_message.Changed_password_body_mail.replace("{name}", name).replace("{password}", new_password) // Plain text body
             };
-            transporter.sendMail(message, function (err, info) {});
+            transporter.sendMail(message, function (err, info) { });
             res.send(200, {
               msg: "Changed password mail send"
             });

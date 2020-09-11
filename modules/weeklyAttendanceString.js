@@ -1,7 +1,7 @@
 const moment = require('moment-timezone')
 const attendanceModel = require('../model/attendance');
 
-function is_notweekend(req, res, next) {
+var is_notweekend = (req, res, next) => {
     let dateforsearch = req.body.date;
     var dt = new Date(dateforsearch);
     console.log(dt);
@@ -18,7 +18,7 @@ function is_notweekend(req, res, next) {
 
 }
 
-async function weeklyAttendance(req, res, next) {
+var weeklyAttendance = async (req, res, next) => {
     //let id = req.id;
     let body = req.body;
     console.log(body)
@@ -56,12 +56,12 @@ async function weeklyAttendance(req, res, next) {
         return { "date": moment(docval.date).format("DD-MMM-YYYY"), "attendance": docval.empattendance }
     });
     // filter results, remove dates after enddate
-    let f_result = result.filter((val)=>{
+    let f_result = result.filter((val) => {
         var _date = moment(val.date); // deprication warning
-        if(_date.isBefore(enddate)){
+        if (_date.isBefore(enddate)) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     });

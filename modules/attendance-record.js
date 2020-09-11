@@ -1,15 +1,13 @@
-var attendance = require('../model/attendance')
-
-var moment = require('moment');
+const attendance = require('../model/attendance')
 const resources = require('../model/resource');
 
 
-function markAttendance(req, res) {
+var markAttendance = (req, res) => {
   let body = req.body;
   let empattendance_data = body.map((item) => {
     return item.empid;
   })
- 
+
   resources.find({
     "id": empattendance_data,
     "project": true
@@ -17,45 +15,45 @@ function markAttendance(req, res) {
     if (err) {
       return err
     } else {
-      
-      result.map((data)=>{
+
+      result.map((data) => {
         console.log(data);
         body.map((item) => {
-          if(data.id == item.empid){
+          if (data.id == item.empid) {
             console.log(item);
-          attendance.find({"empid" : data.id, "date" : item.date}, (err,result) => {
-          if(err) {return err}
-          console.log(result)
-          if (result.length==0){
-            
-            let attendancedata = new attendance({
-                     date: item.date,
-                     empattendance: item.empattendance,
-              
-                     empid:data.id,
-                 project:data.project
-              
+            attendance.find({ "empid": data.id, "date": item.date }, (err, result) => {
+              if (err) { return err }
+              console.log(result)
+              if (result.length == 0) {
+
+                let attendancedata = new attendance({
+                  date: item.date,
+                  empattendance: item.empattendance,
+
+                  empid: data.id,
+                  project: data.project
+
                 });
-              
-                   attendancedata
-                   .save((err) => {
+
+                attendancedata
+                  .save((err) => {
                     if (err) {
-                        return res.send(404, {
-                            message: "Not Found"
-                        })
-                      }
+                      return res.send(404, {
+                        message: "Not Found"
                       })
-                   }
-                   else {
-                    attendance.findOneAndUpdate({"empid" : data.id, "date" : item.date}, {"empid" : data.id, "date" : item.date, $set : {"empattendance" : item.empattendance}, "project" : data.project}, (err) => {
-                      if(err) {return err}
-                      })
-                   }
-          })
+                    }
+                  })
+              }
+              else {
+                attendance.findOneAndUpdate({ "empid": data.id, "date": item.date }, { "empid": data.id, "date": item.date, $set: { "empattendance": item.empattendance }, "project": data.project }, (err) => {
+                  if (err) { return err }
+                })
+              }
+            })
           }
         })
       })
-      res.send({msg : "updated"});
+      res.send({ msg: "updated" });
     }
   })
 }
@@ -84,7 +82,7 @@ function is_weekend(req, res, next) {
 
 module.exports = {
   markAttendance,
- 
+
   //is_weekend
 }
 

@@ -4,7 +4,8 @@ const empattendance = require("../model/attendance");
 
 
 var array = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
-function validation(req, res, next) {
+
+var validation = (req, res, next) => {
     var date = req.body.date;
 
     var exitsdate = moment(date, 'DD-MMM-YYYY').isAfter('31-jul-2020')
@@ -16,7 +17,7 @@ function validation(req, res, next) {
     }
 }
 
-async function attendance(req, res, next) {
+var attendance = async (req, res, next) => {
     var date = req.body.date;
     var empid = req.body.empid;
     var now = moment(date, 'DD-MMM-YYYY');
@@ -29,7 +30,7 @@ async function attendance(req, res, next) {
         }
         else {
             if (empid === undefined) {
-                var result = await empattendance.find({ "date": date ,"project":true});
+                var result = await empattendance.find({ "date": date, "project": true });
 
                 if (result.length === 0) {
                     return res.status(404).json({ message: "attendance not filled" });
@@ -41,15 +42,15 @@ async function attendance(req, res, next) {
                 });
                 return res.status(200).json(temp)
             }
-            var result = await empattendance.find({"empid": empid ,"date":date});
+            var result = await empattendance.find({ "empid": empid, "date": date });
 
             if (result.length === 0) {
                 return res.status(404).json({ message: "attendance not filled" });
             }
-           
-                res.status(200).json({ "empid":result[0].empid, "status":result[0].empattendance, "date":result[0].date });
 
-       
+            res.status(200).json({ "empid": result[0].empid, "status": result[0].empattendance, "date": result[0].date });
+
+
         }
     }
 
@@ -58,18 +59,20 @@ async function attendance(req, res, next) {
     }
 }
 
-function holiday(req, res, next) {
+var holiday = (req, res, next) => {
     var date = req.body.date;
 
 
-   array.forEach(key=>{if (key == date) {
+    array.forEach(key => {
+        if (key == date) {
 
-    res.status(200).json({ message: "mandatory holiday" })
+            res.status(200).json({ message: "mandatory holiday" })
 
-}})
+        }
+    })
 
-       
-    
+
+
     next();
 }
 

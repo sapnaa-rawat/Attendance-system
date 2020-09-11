@@ -1,8 +1,8 @@
-var empattendance = require('../model/attendance');
-var moment = require('moment');
+const empattendance = require('../model/attendance');
+const moment = require('moment');
 
 const leaves = ['PL', 'UPL', 'UCL', 'PCL'];
-var holidays = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
+const holidays = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
 
 /**
  * Finds all leaves from start date (inclusive) till no of days (exclusive)
@@ -10,7 +10,7 @@ var holidays = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-
  * @param {Date} sdate - in moment format ('DD-MMM-YYYY')
  * @param {Number} days 
  */
-async function getLeavesFrom(id, sdate, days) {
+var getLeavesFrom = async (id, sdate, days) => {
     const date_end = moment(sdate).add(parseInt(days), 'days').format('DD-MMM-YYYY');
     // if id not given, fetch data for all users involved in a project in the date range
     if (!id) {
@@ -26,17 +26,17 @@ async function getLeavesFrom(id, sdate, days) {
     // formatt the data and omit excess info
     var result = leavesList.map(key => { return { "empid": key.empid, "leave": key.empattendance, "date": key.date } });
     // make sure all dates fall in the range between sdate and date_end
-    var filtered_result = result.filter(val=>{
+    var filtered_result = result.filter(val => {
         let d = moment(val.date);
         // to include the current day as well
-        let sd = moment(sdate).subtract(1,'day');
+        let sd = moment(sdate).subtract(1, 'day');
         let ed = moment(date_end);
         return (d.isBefore(ed) && d.isAfter(sd));
     });
     return filtered_result;
 }
 
-function dateIsValid(req, res, next) {
+var dateIsValid = (req, res, next) => {
     var date = moment(req.body.date);
     var week = date.day();
     if (week == 0 || week == 6) {
@@ -50,7 +50,7 @@ function dateIsValid(req, res, next) {
     }
 }
 
-function dateIsMonday(req, res, next) {
+var dateIsMonday = (req, res, next) => {
     var date = moment(req.body.date);
     var week = date.day();
     if (week === 1) {
@@ -61,7 +61,7 @@ function dateIsMonday(req, res, next) {
     }
 }
 
-async function getLeaveOnDate(req, res) {
+var getLeaveOnDate = async (req, res) => {
     var date = moment(req.body.date);
     var empid = req.body.empid;
     // Get leaves list for one day
@@ -74,7 +74,7 @@ async function getLeaveOnDate(req, res) {
     }
 }
 
-async function getWeeklyLeaves(req, res) {
+var getWeeklyLeaves = async (req, res) => {
     const date = moment(req.body.date);
     const id = req.body.id;
     // Get leaves list for the week
@@ -87,20 +87,20 @@ async function getWeeklyLeaves(req, res) {
     }
 }
 
-async function getmonthlyLeaves(req, res) {
+var getmonthlyLeaves = async (req, res) => {
     const d = new Date();
     const id = req.body.id;
     const month = req.body.month || d.getMonth();
     const year = d.getFullYear();
-    if(!month){
-        return res.status(400).json({message:"month not provided"});
+    if (!month) {
+        return res.status(400).json({ message: "month not provided" });
     }
     // starting date of month
-    const sdate = moment([year,month]);
+    const sdate = moment([year, month]);
     // days in month
     const days = sdate.daysInMonth();
     // get leaves for the month
-    var result = await getLeavesFrom(id, sdate.format('DD-MMM-YYYY'), days-1);
+    var result = await getLeavesFrom(id, sdate.format('DD-MMM-YYYY'), days - 1);
     if (result.length === 0) {
         res.status(404).json({ message: "No leaves record found" });
     }
