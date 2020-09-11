@@ -19,7 +19,7 @@ router.post('/change_Password', loginHandler.validateToken, forget_password.chan
 
 router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance',loginHandler.validateToken,  Attendance.findIdfromemail, Attendance.markAttendance);
+router.post('/markattendance', loginHandler.validateToken, Attendance.findIdfromemail, Attendance.markAttendance);
 
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.findIdfromemail, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
@@ -31,8 +31,8 @@ router.route("/deleteuser").post(deleteuser.deleteUser);
 
 router.route("/addtoproject").post(addtoproject.addUsertoProject);
 
-router.post('/applyleave', loginHandler.validateToken, leaves.applyLeave);
+router.get('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.getLeaveOnDate);
 
-router.get('/leaves',loginHandler.validateToken , leaves.getAll);
+router.get('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
 module.exports = router;
