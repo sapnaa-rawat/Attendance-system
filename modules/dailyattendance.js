@@ -59,11 +59,9 @@ const attendance = async (req, res, next) => {
 
 const holiday = (req, res, next) => {
     var date = req.body.date;
-    constants.constant_Data.HOLIDAYS_DATE.forEach(key => {
-        if (key == date) {
-            res.status(200).json({ message: "mandatory holiday" })
-        }
-    })
+    if(constants.constant_Data.HOLIDAYS_DATE.includes(date)){
+        return res.status(200).json({ message: "mandatory holiday" });
+    }
     next();
 }
 

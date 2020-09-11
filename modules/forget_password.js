@@ -2,8 +2,6 @@ const nodemailer = require("nodemailer");
 const resources = require("../model/resource");
 const constants = require("./constants");
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
 
 
 var transporter = nodemailer.createTransport({
@@ -13,8 +11,8 @@ var transporter = nodemailer.createTransport({
   secure: false,
   requireTLS: true,
   auth: {
-    user: "noreplymailed2020@gmail.com",
-    pass: "noReply@12345",
+    user: constants.constant_Data.USER,
+    pass: constants.constant_Data.PASSWORD,
   }
 });
 
@@ -25,7 +23,7 @@ var transporter = nodemailer.createTransport({
  * @returns hashed password
  */
 const passhash = async (password) => {
-  const hashPass = await bcrypt.hash(password, saltRounds);
+  const hashPass = await bcrypt.hash(password, constants.constant_Data.SALTROUNDS);
   return hashPass;
 }
 
@@ -63,7 +61,7 @@ exports.forgot_Password = (req, res) => {
             from: constants.constant_Data.SENDER_MAIL_ID, // Sender address
             to: email, // List of recipients
             subject: constants.constant_Data.SUBJECT_RESET_PASSWORD, // Subject line
-            html: constants.constant_Data.FORGET_BODY_MAIL.replace("{name}", name).replace("{password}", new_password) // Plain text body
+            html: constants.constant_Data.FORGET_BODY_MAIL(name, new_password) // Plain text body
           };
           transporter.sendMail(message, function (err, info) {}); //sending mail
           res.send(200, {
@@ -111,7 +109,7 @@ exports.change_Password = (req, res) => {
               from: constants.constant_Data.SENDER_MAIL_ID, // Sender address
               to: email, // List of recipients
               subject: constants.constant_Data.SUBJECT_CHANGED_PASSWORD, // Subject line
-              html: constants.constant_Data.CHANGED_PASSWORD_BODY_MAIL.replace("{name}", name).replace("{password}", new_password) // Plain text body
+              html: constants.constant_Data.CHANGED_PASSWORD_BODY_MAIL(name, new_password) // Plain text body
             };
             transporter.sendMail(message, function (err, info) { });
             res.send(200, {

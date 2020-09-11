@@ -1,6 +1,6 @@
-const attendance = require('../model/attendance');
 const moment = require('moment');
 const resources = require('../model/resource');
+const attendances = require('../model/attendance');
 
 
 const check_Weekend = (req, res, next) => {
@@ -16,58 +16,19 @@ const check_Weekend = (req, res, next) => {
   next();
 }
 
-const markAttendance = (req, res) => {
+const markAttendance = async (req, res) => {
   let body = req.body;
-  const empattendance_data = body.map((item) => {
-    return item.empid;
-  })
-
-  resources.find({"id": empattendance_data, "project": true}, (err, result) => {
-    if (err) {
-      return err
-    } 
-    else {
-      result.map((data) => {
-        body.map((item) => {
-          if (data.id == item.empid) {
-            attendance.find({
-              "empid": data.id,
-              "date": item.date
-            }, (err, result) => {
-              if (err) {
-                return err
-              }
-              if (result.length == 0) {
-
-                let attendancedata = new attendance({
-                  date: item.date,
-                  empattendance: item.empattendance,
-                  empid: data.id,
-                  project: data.project
-
-                });
-
-                attendancedata
-                  .save((err) => {
-                    if (err) {
-                      return res.send(404, {
-                        message: "Not Found"
-                      })
-                    }
-                  })
-              }
-              else {
-                attendance.findOneAndUpdate({ "empid": data.id, "date": item.date }, { "empid": data.id, "date": item.date, $set: { "empattendance": item.empattendance }, "project": data.project }, (err) => {
-                  if (err) { return err }
-                })
-              }
-            })
-          }
-        })
+  const empattendance_data = body.map((item) => item.empid);
+  const resource_data = await resources.find({"id" : empattendance_data, "project" : true, "deleted" : false}).catch((err) => console.log(err));
+  const resource_id = resource_data.map((item) => item.id);
+  body.map((item) => {
+    if(resource_id.includes(item.empid)){
+      attendances.findOneAndUpdate({"empid": item.empid, "date" : item.date}, {$set : {"empattendance" : item.empattendance, "project" : true}}, {upsert : true}, (err) => {
+        if(err) {return res.send(err);}
       })
-      res.send({ msg: "updated" });
     }
   })
+  res.send("ok");
 }
 
 
