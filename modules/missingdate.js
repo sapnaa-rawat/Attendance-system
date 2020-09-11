@@ -89,12 +89,12 @@ function difference(setA, setB) {
 
 var newMissingDates = async (req, res) => {
     const { empid } = req.body;
-    const startingDate = moment([2020, 6, 31]);
-    const endDate = moment(new Date()); // 31-Jul-2020
+    const startingDate = moment(constants.constant_Data.DB_STARTS_DATE); // 31-Jul-2020
+    const endDate = moment(new Date()); 
     var day = startingDate.clone();
     const df = 'DD-MMM-YYYY'; // date format
     var calendar = new Set();
-    // create a claendar till today, exclude holidays
+    // create a calendar till today, exclude holidays
     for (var i = 0; i < endDate.diff(startingDate, 'days'); i++) {
         day = day.add(1, 'days');
         // check Sat Sun

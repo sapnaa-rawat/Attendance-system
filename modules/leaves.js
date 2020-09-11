@@ -1,8 +1,9 @@
 const empattendance = require('../model/attendance');
 const moment = require('moment');
+const constants = require('./constants');
 
 const leaves = ['PL', 'UPL', 'UCL', 'PCL'];
-const holidays = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
+const holidays = constants.constant_Data.HOLIDAYS_DATE;
 
 /**
  * Finds all leaves from start date (inclusive) till no of days (exclusive)
