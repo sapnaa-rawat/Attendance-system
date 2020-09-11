@@ -1,15 +1,7 @@
-const attendance = require('../model/attendance')
-// var Employee = require('../model/resource');
-const moment = require('moment');
-const {
-  Date
-} = require('mongoose');
+var attendance = require('../model/attendance')
+
+var moment = require('moment');
 const resources = require('../model/resource');
-
-
-
-
-
 
 
 function markAttendance(req, res) {
@@ -70,21 +62,30 @@ function markAttendance(req, res) {
 
 
 
-
+/*
 function is_weekend(req, res, next) {
   let dateforsearch = req.body.date;
   var dt = new Date(dateforsearch);
   var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
+  console.log(verifyDate,"heyyy")
 
-  if (dt.getDay() == 0 && dt.getDay() == 6 && verifyDate == true) {
-    return res.send(holiday);
+
+  if ( dt.getDay() == 0 && dt.getDay() == 6 && verifyDate ==true) {
+    console.log(dt)
+    return res.send("holiday");
   }
-  return res.status(422).send({
-    msg: 'not a valid date to find attendance of whole week'
-  });
+  else {
+    
+        next()
+ 
 }
+
+}*/
 
 module.exports = {
   markAttendance,
-  is_weekend
+ 
+  //is_weekend
 }
+
+
