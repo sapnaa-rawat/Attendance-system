@@ -3,25 +3,33 @@ var moment = require('moment');
 const resources = require('../model/resource');
 
 
-function markAttendance(req, res) {
+const check_Weekend = (req, res, next) => {
   let body = req.body;
-  let empattendance_data = body.map((item) => {
+  body.forEach((item) => {
+    var verifyDate = moment(item.date, 'DD-MMM-YYYY').isAfter('31-jul-2020')
+    var date = new Date(item.date);
+    console.log(date.getDay(), verifyDate);
+    if (date.getDay() == 0 || date.getDay() == 6 || (!(verifyDate))){
+      return res.send({"msg": `holiday on this ${item.date} `})
+    }
+  })
+  next();
+}
+
+const markAttendance = (req, res) => {
+  let body = req.body;
+  const empattendance_data = body.map((item) => {
     return item.empid;
   })
 
-  resources.find({
-    "id": empattendance_data,
-    "project": true
-  }, (err, result) => {
+  resources.find({"id": empattendance_data, "project": true}, (err, result) => {
     if (err) {
       return err
-    } else {
-      console.log(result);
+    } 
+    else {
       result.map((data) => {
-        console.log(">>>>>>>>>",data);
         body.map((item) => {
           if (data.id == item.empid) {
-            console.log("#######",data.id, "==", item.empid);
             attendance.find({
               "empid": data.id,
               "date": item.date
@@ -43,7 +51,8 @@ function markAttendance(req, res) {
                   .save((err) => {
                     if (err) {
                       return res.send(404, {
-                        message: "Not Found", err
+                        message: "Not Found",
+                        err
                       })
                     }
                   })
@@ -76,29 +85,7 @@ function markAttendance(req, res) {
 }
 
 
-
-/*
-function is_weekend(req, res, next) {
-  let dateforsearch = req.body.date;
-  var dt = new Date(dateforsearch);
-  var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
-  console.log(verifyDate,"heyyy")
-
-
-  if ( dt.getDay() == 0 && dt.getDay() == 6 && verifyDate ==true) {
-    console.log(dt)
-    return res.send("holiday");
-  }
-  else {
-    
-        next()
- 
-}
-
-}*/
-
 module.exports = {
   markAttendance,
-
-  //is_weekend
+  check_Weekend
 }

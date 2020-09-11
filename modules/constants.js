@@ -1,5 +1,6 @@
 module.exports = {
     constant_Data: {
+        DB_STARTS_DATE : "2020-07-31",
         SENDER_MAIL_ID : "noreplymailed2020@gmail.com",
         SUBJECT_RESET_PASSWORD : "Reset password",
         SUBJECT_CHANGED_PASSWORD : "Password Changed",

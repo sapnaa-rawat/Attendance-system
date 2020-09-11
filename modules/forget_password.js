@@ -18,11 +18,23 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+/**
+ * @description Hashing password
+ * @summary convert the password into hash
+ * @param {password}
+ * @returns hashed password
+ */
 async function passhash(password) {
   const hashPass = await bcrypt.hash(password, saltRounds);
   return hashPass;
 }
 
+/**
+ * @description Forgot password
+ * @summary create a random generated password and send mail to user
+ * @param {email} email
+ * @returns sends a mail to the user with it's passwords
+ */
 exports.forgot_Password = (req, res) => {
   var email = req.body.email;
   resources.findOne({
@@ -37,7 +49,7 @@ exports.forgot_Password = (req, res) => {
     } else {
       var new_password = Math.random().toString(36).slice(-6);
       var name = result.name;
-      const hashPass = await passhash(new_password);
+      const hashPass = await passhash(new_password); //hashing password
       resources.findByIdAndUpdate(result._id, {
         $set: {
           "password": hashPass
@@ -53,7 +65,7 @@ exports.forgot_Password = (req, res) => {
             subject: constants.constant_Data.SUBJECT_RESET_PASSWORD, // Subject line
             html: constants.constant_Data.FORGET_BODY_MAIL.replace("{name}", name).replace("{password}", new_password) // Plain text body
           };
-          transporter.sendMail(message, function (err, info) {});
+          transporter.sendMail(message, function (err, info) {}); //sending mail
           res.send(200, {
             msg: "password mail send"
           });
@@ -63,6 +75,12 @@ exports.forgot_Password = (req, res) => {
   });
 };
 
+/**
+ * @description Change Password
+ * @summary change old password with new password and send mail to user
+ * @param {email, old_password, new_password, confirm_password}
+ * @returns sends a mail to the user with it's passwords
+ */
 exports.change_Password = (req, res) => {
   var email = req.body.email;
   var old_password = req.body.old_password;
