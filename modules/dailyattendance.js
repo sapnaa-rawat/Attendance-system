@@ -1,6 +1,6 @@
-var moment = require("moment")
-var empattendance = require("../model/attendance");
-const { json } = require("body-parser");
+const moment = require("moment")
+const empattendance = require("../model/attendance");
+
 
 
 var array = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];

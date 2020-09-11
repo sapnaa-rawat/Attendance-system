@@ -1,9 +1,9 @@
-var resource = require('../model/resource');
-var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
-var LocalStorage = require('node-localstorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
-var crypto = require('crypto');
+const resource = require('../model/resource');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const LocalStorage = require('node-localstorage').LocalStorage;
+const localStorage = new LocalStorage('./scratch');
+const crypto = require('crypto');
 
 async function generateSecret() {
     const randomSecret = await crypto.randomBytes(32).toString('hex');

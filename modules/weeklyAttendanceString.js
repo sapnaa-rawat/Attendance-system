@@ -1,4 +1,3 @@
-const express = require('express');
 const moment = require('moment-timezone')
 const resourceModel = require('../model/resource');
 const attendanceModel = require('../model/attendance');

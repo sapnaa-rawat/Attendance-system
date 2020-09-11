@@ -1,7 +1,6 @@
-var model = require('../model/resource');
-var moment = require('moment');
-var validator = require("email-validator");
-var bcrypt = require('bcrypt');
+const model = require('../model/resource');
+const validator = require("email-validator");
+const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
