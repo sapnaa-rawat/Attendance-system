@@ -1,33 +1,30 @@
-  
-var resource = require('../model/resource');
-var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
-var LocalStorage = require('node-localstorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
-var crypto = require('crypto');
+const resource = require('../model/resource');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
-async function generateSecret() {
+const generateSecret = async () => {
     const randomSecret = await crypto.randomBytes(32).toString('hex');
     process.env.TOKEN_SECRET = randomSecret;
     return randomSecret;
 }
 
 //finds all employees involved in a project
-async function findEmpInProject() {
-    var empsAllDetails = await resource.find({project:true, deleted:false});
-    var emps = await empsAllDetails.map((value,index)=>{
+const findEmpInProject = async () => {
+    var empsAllDetails = await resource.find({ project: true, deleted: false });
+    var emps = await empsAllDetails.map((value, index) => {
         return {
-            name:value.name,
-            email:value.email,
-            id:value.id,
-            technology:value.technology,
-            designation:value.designation
+            name: value.name,
+            email: value.email,
+            id: value.id,
+            technology: value.technology,
+            designation: value.designation
         }
     });
     return emps;
 }
 
-function validateToken(req, res, next) {
+const validateToken = (req, res, next) => {
     const token = req.header('auth-token') || req.headers.authorization.split(" ")[1];
     if (!token) {
         res.status(401).send({ message: "Unauthorised." });
@@ -42,7 +39,7 @@ function validateToken(req, res, next) {
     }
 }
 
-async function login(req, res, next) {
+const login = async (req, res, next) => {
     var { email, password } = req.body;
     // null check
     if (email.length === 0) {
@@ -59,8 +56,6 @@ async function login(req, res, next) {
             const match = await bcrypt.compare(password, hashed_pass);
 
             if (match) {
-                //save email in localstorage
-                localStorage.setItem('email', email);
                 // Generate a random secret, this also invalidates previous login token
                 await generateSecret();
                 // sign JWT token
@@ -70,7 +65,7 @@ async function login(req, res, next) {
                 }, process.env.TOKEN_SECRET, { expiresIn: '3h' });
                 //Get employees in a project
                 var empsInProject = await findEmpInProject();
-                if(empsInProject.length===0){
+                if (empsInProject.length === 0) {
                     empsInProject = "Currently no employees in a project.";
                 }
                 res.status(200).header('auth-token', token).send({

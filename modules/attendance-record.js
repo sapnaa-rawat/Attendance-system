@@ -1,5 +1,5 @@
-var attendance = require('../model/attendance');
-var moment = require('moment');
+const attendance = require('../model/attendance');
+const moment = require('moment');
 const resources = require('../model/resource');
 
 
@@ -51,35 +51,21 @@ const markAttendance = (req, res) => {
                   .save((err) => {
                     if (err) {
                       return res.send(404, {
-                        message: "Not Found",
-                        err
+                        message: "Not Found"
                       })
                     }
                   })
-              } else {
-                attendance.findOneAndUpdate({
-                  "empid": data.id,
-                  "date": item.date
-                }, {
-                  "empid": data.id,
-                  "date": item.date,
-                  $set: {
-                    "empattendance": item.empattendance
-                  },
-                  "project": data.project
-                }, (err) => {
-                  if (err) {
-                    return err
-                  }
+              }
+              else {
+                attendance.findOneAndUpdate({ "empid": data.id, "date": item.date }, { "empid": data.id, "date": item.date, $set: { "empattendance": item.empattendance }, "project": data.project }, (err) => {
+                  if (err) { return err }
                 })
               }
             })
           }
         })
       })
-      res.send({
-        msg: "updated"
-      });
+      res.send({ msg: "updated" });
     }
   })
 }

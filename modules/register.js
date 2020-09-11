@@ -1,80 +1,80 @@
-var model = require('../model/resource');
-var moment = require('moment');
-var validator = require("email-validator");
-var bcrypt = require('bcrypt');
+const model = require('../model/resource');
+const validator = require("email-validator");
+const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
-function validate(req, res, next) {
+const validate = (req, res, next) => {
     var { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
-        if(!name){
+        if (!name) {
             throw new Error("Name not provided.");
         }
-        if(!email){
+        if (!email) {
             throw new Error("Email not provided.");
         }
-        if(!phoneNumber){
+        if (!phoneNumber) {
             throw new Error("Phone number not provided.");
         }
-        if(!skype){
+        if (!skype) {
             throw new Error("Skype not provided.");
         }
-        if(!designation){
+        if (!designation) {
             throw new Error("Designation not provided.");
         }
-        if(!technology){
+        if (!technology) {
             throw new Error("Technology not provided.");
         }
-        if(!password){
+        if (!password) {
             throw new Error("Password not provided.");
         }
-        else{
+        else {
             var emailValid = validator.validate(email);
-            if(!emailValid){
+            if (!emailValid) {
                 throw new Error("Invalid email.");
             }
             next();
         }
-        
-    } 
+
+    }
     catch (error) {
-        res.status(400).send({message:"Invalid details", error:`${error}`});
+        res.status(400).send({ message: "Invalid details", error: `${error}` });
     }
 }
 
-async function resourceExists(req, res, next) {
+const resourceExists = async (req, res, next) => {
     const email = req.body.email;
     try {
-        var existing = await model.find({email:email});
-    if (existing.length > 0) {
-        // console.log(existing);
-        res.status(409).send({ message: "Resource already exists.",
-         resource:{
-             id:existing[0].id,
-             email:existing[0].email
-            } 
-        });
+        var existing = await model.find({ email: email });
+        if (existing.length > 0) {
+            // console.log(existing);
+            res.status(409).send({
+                message: "Resource already exists.",
+                resource: {
+                    id: existing[0].id,
+                    email: existing[0].email
+                }
+            });
+        }
+        else {
+            next();
+        }
     }
-    else {
-        next();
-    }
-    } 
     catch (error) {
-        res.status(500).send({message:"Error reading from database.", error:`${error}`});
+        res.status(500).send({ message: "Error reading from database.", error: `${error}` });
     }
 }
 
-async function register(req, res, next) {
+const register = async (req, res, next) => {
     var { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
         //hash the password
-        const hashPass = await bcrypt.hash(password,saltRounds);
+        const hashPass = await bcrypt.hash(password, saltRounds);
         //get the date in the required format
         // const date = moment(new Date).format("DD-MMM-YYYY");
         const date = new Date();
         //sanity check for project
-        var project = project===true;
+        var project = project === true;
         //Create record
         let newResource = new model({
             name: name,
@@ -92,10 +92,10 @@ async function register(req, res, next) {
         });
         newResource.save()
             .then(doc => res.status(201).send({ message: "User created sucessfully." }))
-            .catch(err => res.status(500).send({ message: "Err! User creation failed.", error:err }));
-        
+            .catch(err => res.status(500).send({ message: "Err! User creation failed.", error: err }));
+
     } catch (error) {
-        res.status(500).send({message:"Password hash failed.",error:`${error}`});
+        res.status(500).send({ message: "Password hash failed.", error: `${error}` });
     }
 }
 
