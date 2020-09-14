@@ -62,7 +62,7 @@ async function holiday(req, res, next) {
     var date = req.body.date;
   var result=await holidays.findOne({"holidayDate":date})
 if(result){
-    res.status(200).json({"occassion":result.occasion})
+    res.status(200).json({message:"holiday"})
 }
 next();
 }
