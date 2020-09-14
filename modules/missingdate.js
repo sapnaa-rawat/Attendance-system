@@ -3,15 +3,6 @@ const constants = require('./constants');
 const attendance = require('../model/attendance');
 const resources = require('../model/resource');
 
-
-/**
- * @description Missing attendance Dates
- * @summary find missing attendance date for single resource/all resources
- * @param {empid} 
- * @returns array of dates
- */
-
-
 /**
  * Find set difference
  * @param {Set} setA - Set from which elements to remove
@@ -26,6 +17,12 @@ function difference(setA, setB) {
     return _difference
 }
 
+/**
+ * @description Missing attendance Dates
+ * @summary find all dates on which no attendance was recorded
+ * @param {empid} 
+ * @returns array of dates
+ */
 var missingDates = async (req, res) => {
     // const { empid } = req.body;
     const startingDate = moment(constants.constant_Data.DB_STARTS_DATE); // 31-Jul-2020
@@ -51,7 +48,7 @@ var missingDates = async (req, res) => {
     var missingDates = []
     try {
         // the below query returns distinct dates in an array
-        var allUserData = await attendance.find().distinct('date');
+        var allUserData = await attendance.distinct('date');
         // find set difference = calendar - Set(allUserData), push that into the missingDates array
         missingDates.push.apply(missingDates, [...difference(calendar, new Set(allUserData))]);
         //if no dates found, send response else send dates
