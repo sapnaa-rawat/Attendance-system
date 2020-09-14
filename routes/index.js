@@ -33,7 +33,7 @@ router.post('/markattendance', Attendance.check_Weekend, Attendance.markAttendan
 
 router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
-router.get('/missedattendance', missingdate.missingdates);
+router.get('/missedattendance', missingdate.missingDates);
 
 router.get('/dailyleaves', leaves.dateIsValid, leaves.getLeaveOnDate);
 
@@ -41,6 +41,6 @@ router.get('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getW
 
 router.get('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
 
-router.post('/mandatoryholiday',add.validate,add.holiday);
+//router.post('/mandatoryholiday',add.validate,add.holiday);
 
 module.exports = router;
