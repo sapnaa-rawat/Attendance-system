@@ -6,16 +6,15 @@ const saltRounds = 10;
 
 
 var transporter = nodemailer.createTransport({
-  service: "Gmail",
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: "noreplymailed2020@gmail.com",
-    pass: "noReply@12345",
-  }
-});
+    service: "Gmail",
+    host: "smtp-relay.gmail.com",
+    port: 465,
+    auth: {
+      user: "noreplymailed2020@gmail.com",
+      pass: "",
+    },
+    secure: true,
+  });
 
 async function passhash(password) {
   const hashPass = await bcrypt.hash(password, saltRounds);
