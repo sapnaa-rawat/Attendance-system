@@ -1,6 +1,7 @@
 const moment = require("moment")
 const empattendance = require("../model/attendance");
 
+const holidays=require("../model/holiday");
 
 
 var array = ['03-Aug-2020', '02-Oct-2020', '13-Nov-2020', '30-Nov-2020', '25-Dec-2020'];
@@ -58,19 +59,13 @@ async function attendance(req, res, next) {
     }
 }
 
-function holiday(req, res, next) {
+async function holiday(req, res, next) {
     var date = req.body.date;
-
-
-   array.forEach(key=>{if (key == date) {
-
-    res.status(200).json({ message: "mandatory holiday" })
-
-}})
-
-       
-    
-    next();
+  var result=await holidays.findOne({"holidayDate":date})
+if(result){
+    res.status(200).json({"occassion":result.occasion})
+}
+next();
 }
 
 module.exports = {
