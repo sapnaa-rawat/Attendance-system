@@ -13,7 +13,7 @@ app.use(helmet());
 
 
 //mongo db server connection
-mongoose.connect('mongodb://localhost/basicProject', {
+mongoose.connect('mongodb://localhost/kellton_attendance', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -39,7 +39,7 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/api/v1/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

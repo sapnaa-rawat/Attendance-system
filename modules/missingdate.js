@@ -6,71 +6,27 @@ const resources = require('../model/resource');
 
 /**
  * @description Missing attendance Dates
- * @summary find missing attendance date for single resource/all resources
- * @param {empid} 
+ * @summary find missing attendance
  * @returns array of dates
  */
-
-
-const missingdates = (req, res) => {
-    var id = req.body.empid;
+const missingdates = async (req, res) => {
     var to_Date = moment(new Date()).format('DD-MMM-YYYY');
     var from_Date = moment(constants.constant_Data.DB_STARTS_DATE).format('DD-MMM-YYYY');
     var dates = [];
     for (var m = moment(from_Date); m.isSameOrBefore(to_Date); m.add(1, 'days')) {
         if (!(m.days() == 6 || m.days() == 0)) {
             dates.push(m.format('DD-MMM-YYYY'));
-        }
+        }        
     }
-    var filtered_holidays_Dates = dates.filter((item) => {
-        if (!(constants.constant_Data.HOLIDAYS_DATE.includes(item))) {
-            return item
+    const allUserData = await attendance.distinct('date');
+    const missing_Dates = dates.filter((dates) => {
+        if(allUserData.includes(dates)){
+            return false;
+        }else {
+            return true;
         }
     });
-    if (id) {
-        attendance.find({ "empid": id, "date": filtered_holidays_Dates, "project": true }, (err, result) => {
-            if (err) { return err }
-            var filtered__Dates = filtered_holidays_Dates.filter((dates) => {
-                var status = true;
-                result.map((item) => {
-                    if (dates == item.date) {
-                        status = false;
-                    }
-                })
-                return status;
-            })
-            res.send(filtered__Dates);
-        })
-    }
-    else {
-        resources.find({ "project": true }, (err, resource) => {
-            const empid = resource.map((item) => {
-                return item.id;
-            })
-            attendance.find({ "empid": empid, "date": filtered_holidays_Dates, "project": true }, (err, result) => {
-                if (err) { return err }
-                var emp = [];
-                resource.forEach((user) => {
-                    var filtered_users = result.filter((att) => {
-                        return user.id == att.empid;
-                    })
-                    var filtered__Dates = filtered_holidays_Dates.filter((dates) => {
-                        var status = true;
-                        filtered_users.forEach((item) => {
-                            if (dates == item.date) {
-                                status = false;
-                            }
-                        })
-                        return status;
-                    })
-                    let data = { "id": user.id, "Missing Dates": filtered__Dates }
-                    emp.push(data);
-                })
-                res.send(emp);
-            })
-        })
-    }
-
+    res.send(missing_Dates);
 }
 
 /**
@@ -87,10 +43,16 @@ function difference(setA, setB) {
     return _difference
 }
 
-var newMissingDates = async (req, res) => {
-    const { empid } = req.body;
+/**
+ * @description Missing attendance Dates
+ * @summary find all dates on which no attendance was recorded
+ * @param {empid} 
+ * @returns array of dates
+ */
+const missingDates = async (req, res) => {
+    // const { empid } = req.body;
     const startingDate = moment(constants.constant_Data.DB_STARTS_DATE); // 31-Jul-2020
-    const endDate = moment(new Date()); 
+    const endDate = moment(new Date());
     var day = startingDate.clone();
     const df = 'DD-MMM-YYYY'; // date format
     var calendar = new Set();
@@ -101,57 +63,32 @@ var newMissingDates = async (req, res) => {
         if (day.day() === 0 || day.day() === 6) {
             continue;
         }
-        else if (constants.constant_Data.HOLIDAYS_DATE.includes(day.format(df))) {
-            continue;
-        }
+        // else if (constants.constant_Data.HOLIDAYS_DATE.includes(day.format(df))) {
+        //     continue;
+        // }
         else {
             calendar.add(day.format(df));
         }
     }
-    // search criteria for query
-    var filter = {};
-    if (empid) {
-        // if empid is provided, the query searches for that empid only, else gets all data
-        filter['empid'] = empid;
+
+    var missingDates = []
+    try {
+        // the below query returns distinct dates in an array
+        var allUserData = await attendance.distinct('date');
+        // find set difference = calendar - Set(allUserData), push that into the missingDates array
+        missingDates.push.apply(missingDates, [...difference(calendar, new Set(allUserData))]);
+        //if no dates found, send response else send dates
+        if (Object.keys(missingDates).length === 0) {
+            res.status(404).send({ message: "No missing dates found." });
+        }
+        else { res.status(200).send({ dates: missingDates }); }
     }
-    // ALL attendances for each resource id - 
-    var empAttendances = {};
-    // ALL missing dates for each resource id - 
-    var empMissingDate = {};
-    var allUserData = await attendance.find(filter)
-        .then(allUserData => {
-            // segregate data for each empid bucket
-            allUserData.forEach(doc => {
-                let id = doc.empid;
-                let date = doc.date;
-                if (!empAttendances[id]) {
-                    empAttendances[id] = new Set();
-                }
-                empAttendances[id].add(date);
-            });
-        })
-        .then(val => {
-            // Now remove attendance dates from calendar dates for each empid
-            // The remaining dates are the missing dates 
-            for (const key in empAttendances) {
-                if (!empMissingDate[key]) {
-                    empMissingDate[key] = [...difference(calendar, empAttendances[key])];
-                }
-            }
-        })
-        .then(val => {
-            // dates found, now send response
-            if (Object.keys(empMissingDate).length === 0) {
-                res.status(404).send({ message: "No missing dates found." });
-            }
-            else {
-                res.status(200).send(empMissingDate);
-            }
-        })
-        .catch(err => res.status(500).send({ error: `${err}` }));
+    catch (error) {
+        res.status(500).send({ error: `${error}` });
+    }
 }
 
 module.exports = {
-    missingdates,
-    newMissingDates
+    missingDates,
+    //missingdates
 }

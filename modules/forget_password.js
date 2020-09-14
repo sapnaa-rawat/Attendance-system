@@ -6,13 +6,14 @@ const bcrypt = require('bcrypt');
 
 var transporter = nodemailer.createTransport({
     service: "Gmail",
-    host: "smtp-relay.gmail.com",
-    port: 465,
+    host: "smtp.gmail.com",
+    port: 587,
     auth: {
       user: "noreplymailed2020@gmail.com",
-      pass: "",
+      pass: "noReply@12345",
     },
-    secure: true,
+    secure: false,
+    requireTLS: true,
   });
 
 /**

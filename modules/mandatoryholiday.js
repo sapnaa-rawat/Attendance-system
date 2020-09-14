@@ -13,11 +13,19 @@ holidays.save().then(doc=> res.status(201).json({"message":"date added"})).catch
 
 validate=(req,res,next)=>{
     if(!req.body){
-        return res.status(422).json({message:"please provide email or occasion"});
+        return res.status(422).json({message:"please provide dates"});
     }
     next();
 }
-module.exports={
+
+const show_Holidays = () => {
+    holiday_List = holidayList.find().catch((err) => err);
+    res.send(holiday_List);
+}
+
+
+module.exports = {
     holiday,
-    validate
+    validate,
+    show_Holidays
 }
