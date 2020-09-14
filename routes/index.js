@@ -41,6 +41,6 @@ router.get('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getW
 
 router.get('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
 
-router.post('/mandatoryholiday',add.validate,add.holiday);
+router.post('/mandatoryholiday', add.validate, add.holiday);
 
 module.exports = router;
