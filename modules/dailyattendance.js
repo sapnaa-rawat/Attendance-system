@@ -2,6 +2,7 @@ const moment = require("moment");
 const empattendance = require("../model/attendance");
 const constants = require("./constants");
 
+const holidays=require("../model/holiday");
 
 const validation = (req, res, next) => {
     var date = req.body.date;
@@ -57,12 +58,13 @@ const attendance = async (req, res, next) => {
     }
 }
 
-const holiday = (req, res, next) => {
+async function holiday(req, res, next) {
     var date = req.body.date;
-    if(constants.constant_Data.HOLIDAYS_DATE.includes(date)){
-        return res.status(200).json({ message: "mandatory holiday" });
-    }
-    next();
+  var result=await holidays.findOne({"holidayDate":date})
+if(result){
+    res.status(200).json({"occassion":result.occasion})
+}
+next();
 }
 
 module.exports = {

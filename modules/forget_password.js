@@ -5,16 +5,15 @@ const bcrypt = require('bcrypt');
 
 
 var transporter = nodemailer.createTransport({
-  service: "Gmail",
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: constants.constant_Data.USER,
-    pass: constants.constant_Data.PASSWORD,
-  }
-});
+    service: "Gmail",
+    host: "smtp-relay.gmail.com",
+    port: 465,
+    auth: {
+      user: "noreplymailed2020@gmail.com",
+      pass: "",
+    },
+    secure: true,
+  });
 
 /**
  * @description Hashing password

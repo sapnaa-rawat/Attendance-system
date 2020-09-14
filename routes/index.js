@@ -10,7 +10,7 @@ const register = require('../modules/register')
 const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
 const leaves = require('../modules/leaves');
-
+const add=require('../modules/mandatoryholiday')
 router.post('/login', loginHandler.login); //login user API
 
 router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
@@ -37,6 +37,7 @@ router.get('/dailyleaves', leaves.dateIsValid, leaves.getLeaveOnDate);
 
 router.get('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
-router.get('/monthlyleaves', leaves.getmonthlyLeaves);
+router.get('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
+router.post('/mandatoryholiday',add.validate,add.holiday);
 
 module.exports = router;
