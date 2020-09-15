@@ -1,1 +1,18 @@
-ab@gmail.com
+tags: 
+ *          - "Register & Login"
+ *      summary: "Login"
+ *      description: "Login"
+ *      operationId: "Login"
+ *      consumes:
+ *          - "application/json"
+ *      produces:
+ *          - "application/json"
+ *      parameters:
+ *          - in: "body"
+ *      name: "body"
+ *      required: true
+ *      schema: 
+ *         $ref: '../Personal.yaml#/definitions/login'
+ *      responses:
+ *          '201':
+ *          description: Successfully created user

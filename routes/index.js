@@ -12,7 +12,36 @@ const addtoproject = require("../modules/projectApi");
 const leaves = require('../modules/leaves');
 const show_Holidays = require('../modules/mandatoryholiday');
 
+/**
+ * @swagger
+ * /register:
+ *    post:
+ *      tags: 
+ *          - "Register & Login"
+ *      summary: "Register"
+ *      description: "Register"
+ *      operationId: "Register"
+ *      consumes:
+ *          - "application/json"
+ *      produces:
+ *          - "application/json"
+ *      parameters:
+ *          - in: "body"
+ *      name: "body"
+ *      required: true
+ *      schema: 
+ *          $ref: '../Personal.yaml#/definitions/register'
+ *      responses:
+ *          '201':
+ *          description: Successfully created user
+ */
+router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 
+/**
+ * @swagger
+ * /login:
+ *      $ref : 'https://github.com/sapnaa-rawat/Attendance-system/blob/amanBranch/swagger_test.yaml#/paths/login'
+ */
 router.post('/login', loginHandler.login); //login user API
 
 router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
@@ -25,9 +54,7 @@ router.route("/addtoproject").post(addtoproject.addUsertoProject);
 
 router.route("/addtoproject").post(show_Holidays.show_Holidays); 
 
-router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
-
-router.use(loginHandler.validateToken); //using Auth middleware for below API's
+//router.use(loginHandler.validateToken); //using Auth middleware for below API's
 
 router.post('/change_Password', forget_password.change_Password); //Change PASSWORD
 
