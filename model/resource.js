@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 autoIncrement = require("mongoose-auto-increment");
-var connection = mongoose.createConnection("mongodb://localhost/test");
+const connection = mongoose.createConnection("mongodb://localhost/test");
 autoIncrement.initialize(connection);
 
 var resource = new Schema({
@@ -23,6 +23,7 @@ var resource = new Schema({
   createdOn: { type: Date, default: Date.now },
   modifiedOn: { type: Date, default: Date.now },
   password : String,
+  project :{type:Boolean}
 });
 
 resource.plugin(autoIncrement.plugin, {

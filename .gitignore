@@ -44,3 +44,12 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Session storage files
+/scratch
+/scratch/email
+
+# Personal Work File
+Personal.js
+test.yaml
+
