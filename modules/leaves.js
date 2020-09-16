@@ -13,14 +13,17 @@ const holidays = constants.constant_Data.HOLIDAYS_DATE;
  */
 const getLeavesFrom = async (id, sdate, days) => {
     const date_end = moment(sdate).add(parseInt(days), 'days').format('DD-MMM-YYYY');
+    // search criteria for mongo query
+    var filter = { date: { $gte: sdate, $lt: date_end, $nin: holidays }, "empattendance": { $in: leaves } };
     // if id not given, fetch data for all users involved in a project in the date range
     if (!id) {
-        var leavesList = await empattendance.find({ project: true, date: { $gte: sdate, $lt: date_end, $nin: holidays }, "empattendance": { $in: leaves } }).sort({ date: 1 });
+        filter = { project: true, ...filter };
     }
     // if id is given, fetch all data only of that user in the date range
     else {
-        leavesList = await empattendance.find({ empid: id, date: { $gte: sdate, $lt: date_end, $nin: holidays }, "empattendance": { $in: leaves } }).sort({ date: 1 });
+        filter = { empid: id, ...filter};
     }
+    var leavesList = await empattendance.find({ project: true, ...filter }).sort({ date: 1 });
     if (leavesList.length === 0) {
         return [];
     }
