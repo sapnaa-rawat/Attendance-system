@@ -67,9 +67,9 @@ const dateIsMonday = (req, res, next) => {
 
 const getLeaveOnDate = async (req, res) => {
     var date = moment(req.body.date);
-    var empid = req.body.empid;
+    var id = req.body.id;
     // Get leaves list for one day
-    var result = await getLeavesFrom(empid, date.format('DD-MMM-YYYY'), 1);
+    var result = await getLeavesFrom(id, date.format('DD-MMM-YYYY'), 1);
     if (result.length === 0) {
         return res.status(404).json({ message: "No leaves record found" });
     }

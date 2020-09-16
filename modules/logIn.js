@@ -42,10 +42,10 @@ const login = async (req, res, next) => {
     var { email, password } = req.body;
     // null check
     if (email.length === 0) {
-        res.status(400).send({ message: "Please provide an email." })
+        return res.status(400).json({ message: "Please provide an email." });
     }
     else if (password.length === 0) {
-        res.status(400).send({ message: "Please provide a password." })
+        return res.status(400).json({ message: "Please provide a password." });
     }
 
     else {
@@ -67,7 +67,7 @@ const login = async (req, res, next) => {
                 if (empsInProject.length === 0) {
                     empsInProject = "Currently no employees in a project.";
                 }
-                res.status(200).header('auth-token', token).send({
+                res.status(200).header('authorization', `Bearer ${token}`).send({
                     message: "Login sucessful",
                     token: token,
                     employees: empsInProject

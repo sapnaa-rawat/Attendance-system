@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var helmet = require('helmet');
-//const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const SwaggerDocs = require('./swagger_docs');
 
@@ -28,33 +27,12 @@ db.once('open', function () {
   console.log("connection established");
 });
 
-// const swaggerOptions = {
-//   swaggerDefinition: {
-//     info: {
-//       version: "1.0.0",
-//       title: "Attendance System API",
-//       description: "Attendance System API Information",
-//       contact: {
-//         name: "Kellton Developer"
-//       },
-//     },
-//       host: ["http://localhost:3000"],
-//       basePath: "/api/v1",
-//       // security:{
-//       //   bearerAuth: []
-//       // }
-//       schemes:["https", "http"],       
-//   },
-//   tags:{
-//     name: "Register & Login",
-//     description: "Register & Login"
-//   },
-//   apis: ['./routes/index.js']
-//   //apis: ['./Personal.yaml']
-// };
-
-//const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
+// app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
+app.use('/apidocs', function(req, res, next){
+    SwaggerDocs.docs.host = req.get('host');
+    req.swaggerDoc = SwaggerDocs.docs;
+    next();
+}, swaggerUi.serve, swaggerUi.setup());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

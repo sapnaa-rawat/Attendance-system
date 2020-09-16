@@ -39,11 +39,11 @@ router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend, 
 
 router.get('/missedattendance', missingdate.missingDates);
 
-router.get('/dailyleaves', leaves.dateIsValid, leaves.getLeaveOnDate);
+router.post('/dailyleaves', leaves.dateIsValid, leaves.getLeaveOnDate);
 
-router.get('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+router.post('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
-router.get('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
+router.post('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
 
 router.post('/mandatoryholiday', show_Holidays.validate, show_Holidays.holiday);
 
