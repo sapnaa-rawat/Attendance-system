@@ -39,9 +39,9 @@ exports.forgot_Password = (req, res) => {
     "email": email
   }, async (err, result) => {
     if (err) {
-      return res.send(err);
+      return res.send(400, {"msg" : err});
     } else if (result == null) {
-      return res.send({
+      return res.send(404, {
         msg: "No result"
       });
     } else {
@@ -54,7 +54,7 @@ exports.forgot_Password = (req, res) => {
         }
       }, (err, result) => {
         if (err) {
-          return res.send(err);
+          return res.send(400, {"msg" : err});
         } else {
 
           const message = {
@@ -83,7 +83,7 @@ exports.change_Password = (req, res) => {
   var email = req.body.email;
   var old_password = req.body.old_password;
   if (!(req.body.new_password === req.body.confirm_password)) {
-    return res.send({
+    return res.send(401, {
       msg: "Password not matched"
     });
   } else {
@@ -102,7 +102,7 @@ exports.change_Password = (req, res) => {
           }
         }, (err) => {
           if (err) {
-            return res.send(err);
+            return res.send(400, {"msg":err});
           } else {
 
             const message = {
@@ -118,7 +118,7 @@ exports.change_Password = (req, res) => {
           }
         })
       } else {
-        res.status(400).send({
+        res.status(401).send({
           message: "Invalid password."
         });
       }

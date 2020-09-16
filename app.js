@@ -5,8 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var helmet = require('helmet');
-const swaggerJsDoc = require("swagger-jsdoc");
+//const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const SwaggerDocs = require('./swagger_docs');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -27,35 +28,33 @@ db.once('open', function () {
   console.log("connection established");
 });
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      version: "1.0.0",
-      title: "Attendance System API",
-      description: "Attendance System API Information",
-      contact: {
-        name: "Kellton Developer"
-      },
-    },
-      host: ["http://localhost:3000"],
-      basePath: "/api/v1",
-      // security:{
-      //   bearerAuth: []
-      // }       
-  },
-  tags:{
-    name: "Register & Login",
-    description: "Register & Login"
-  },
-schemes:
-- "https"
-- "http",
-  apis: ['./routes/index.js']
-  //apis: ['./Personal.yaml']
-};
+// const swaggerOptions = {
+//   swaggerDefinition: {
+//     info: {
+//       version: "1.0.0",
+//       title: "Attendance System API",
+//       description: "Attendance System API Information",
+//       contact: {
+//         name: "Kellton Developer"
+//       },
+//     },
+//       host: ["http://localhost:3000"],
+//       basePath: "/api/v1",
+//       // security:{
+//       //   bearerAuth: []
+//       // }
+//       schemes:["https", "http"],       
+//   },
+//   tags:{
+//     name: "Register & Login",
+//     description: "Register & Login"
+//   },
+//   apis: ['./routes/index.js']
+//   //apis: ['./Personal.yaml']
+// };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+//const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
