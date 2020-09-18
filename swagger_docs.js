@@ -316,18 +316,6 @@ const docs = {
         ],
         "summary": "holidays",
         "operationId": "holidays",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
-          }
-        ],
         "responses": {
           "405": {
             "description": "Invalid input"
