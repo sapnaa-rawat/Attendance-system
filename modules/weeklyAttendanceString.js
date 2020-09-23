@@ -1,7 +1,7 @@
 const moment = require('moment-timezone')
 const attendanceModel = require('../model/attendance');
 
-const is_notweekend = (req, res, next) => {
+const isnotweekend = (req, res, next) => {
     let dateforsearch = req.body.date;
     var dt = new Date(dateforsearch);
     console.log(dt);
@@ -70,6 +70,6 @@ const weeklyAttendance = async (req, res, next) => {
 
 module.exports = {
     weeklyAttendance,
-    is_notweekend
+    isnotweekend
     //is_holiday
 }
