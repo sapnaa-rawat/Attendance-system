@@ -35,7 +35,7 @@ router.post('/dailycheck', checkAttendance.validation, checkAttendance.holiday, 
 
 router.post('/markattendance', Attendance.check_Weekend, Attendance.markAttendance);
 
-router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
 
 router.get('/missedattendance', missingdate.missingDates);
 
