@@ -61,7 +61,7 @@ const login = async (req, res, next) => {
                 const token = jwt.sign({
                     id: user.id,
                     email: user.email
-                }, process.env.TOKEN_SECRET, { expiresIn: '3h' });
+                }, process.env.TOKEN_SECRET, { expiresIn: '90 days' });
                 //Get employees in a project
                 var empsInProject = await findEmpInProject();
                 if (empsInProject.length === 0) {
