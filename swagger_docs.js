@@ -10,18 +10,10 @@ const docs = {
     },
     "version": "1.0.0-oas3"
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000/api/v1"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
-  "tags": [
-    {
+  "servers": [{
+    "url": "http://localhost:3000/api/v1"
+  }],
+  "tags": [{
       "name": "Register & Login",
       "description": "Register & Login"
     },
@@ -46,6 +38,9 @@ const docs = {
       "description": "Admin has right to change"
     }
   ],
+  "security": [{
+    "bearerAuth": []
+  }],
   "paths": {
     "/register": {
       "post": {
@@ -65,6 +60,7 @@ const docs = {
           },
           "required": true
         },
+        "security": [],
         "responses": {
           "201": {
             "description": "User created sucessfully"
@@ -85,8 +81,7 @@ const docs = {
           "500": {
             "description": "Server error"
           }
-        },
-        "security": []
+        }
       }
     },
     "/login": {
@@ -107,6 +102,7 @@ const docs = {
           },
           "required": true
         },
+        "security": [],
         "responses": {
           "200": {
             "description": "Login sucess",
@@ -130,8 +126,7 @@ const docs = {
           "404": {
             "description": "User does not exist"
           }
-        },
-        "security": []
+        }
       }
     },
     "/forgot_Password": {
@@ -152,6 +147,7 @@ const docs = {
           },
           "required": true
         },
+        "security": [],
         "responses": {
           "200": {
             "description": "Password Sends."
@@ -162,8 +158,7 @@ const docs = {
           "404": {
             "description": "User Not Found."
           }
-        },
-        "security": []
+        }
       }
     },
     "/change_Password": {
@@ -198,11 +193,9 @@ const docs = {
             "description": "No such user."
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": [{
+          "bearerAuth": []
+        }]
       }
     },
     "/markattendance": {
@@ -212,18 +205,16 @@ const docs = {
         ],
         "summary": "mark attendance",
         "operationId": "markattendance",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -238,18 +229,16 @@ const docs = {
         ],
         "summary": "missed attendance",
         "operationId": "missedattendance",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -264,18 +253,16 @@ const docs = {
         ],
         "summary": "daily check",
         "operationId": "dailycheck",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -290,23 +277,34 @@ const docs = {
         ],
         "summary": "check Weekly Attendance",
         "operationId": "checkWeeklyAttendance",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
+        "requestBody": {
+          "description": "New resource information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/checkweeklyAttendance"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
-          "405": {
-            "description": "Invalid input"
+          "200": {
+            "description": "Changed password mail send"
+          },
+          "400": {
+            "description": "Invalid Details"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "No such user."
           }
-        }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
       }
     },
     "/holidays": {
@@ -316,6 +314,16 @@ const docs = {
         ],
         "summary": "holidays",
         "operationId": "holidays",
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
+          }
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -328,30 +336,36 @@ const docs = {
         "tags": [
           "Admin"
         ],
-        "summary": "deleteuser",
+        "summary": "can delete any user from official database",
         "operationId": "deleteuser",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
+        "requestBody": {
+          "description": "delete a user with specific id",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/deleteUser"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
-          "405": {
-            "description": "Invalid input"
+          "200": {
+            "description": "user has been deleted"
+          },
+          "400": {
+            "description": "Invalid Details"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "No such user."
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": [{
+          "bearerAuth": []
+        }]
       }
     },
     "/addtoproject": {
@@ -359,23 +373,31 @@ const docs = {
         "tags": [
           "Admin"
         ],
-        "summary": "addtoproject",
+        "summary": "can add any user to specific project",
         "operationId": "addtoproject",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
+        "requestBody": {
+          "description": "add new user to project or remove any user from project",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addtoProject"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
-          "405": {
-            "description": "Invalid input"
+          "200": {
+            "description": "user has been deleted"
+          },
+          "400": {
+            "description": "Invalid Details"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "No such user."
           }
         }
       }
@@ -445,8 +467,7 @@ const docs = {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
+                    "oneOf": [{
                         "$ref": "#/components/schemas/leaves-details"
                       },
                       {
@@ -504,8 +525,7 @@ const docs = {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
+                    "oneOf": [{
                         "$ref": "#/components/schemas/leaves-details"
                       },
                       {
@@ -534,18 +554,16 @@ const docs = {
         ],
         "summary": "mandatoryholiday",
         "operationId": "mandatoryholiday",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -555,14 +573,21 @@ const docs = {
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "attendance": {
-        "required": [
-          "date",
-          "empattendance",
-          "empid"
-        ],
         "type": "object",
+        "required": [
+          "empattendance",
+          "empid",
+          "date"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -591,7 +616,8 @@ const docs = {
           "date": {
             "type": "string",
             "description": "date in DD-MMM-YYYY format",
-            "format": "date"
+            "format": "date",
+            "example": "10-Aug-2020"
           },
           "project": {
             "type": "boolean",
@@ -600,16 +626,16 @@ const docs = {
         }
       },
       "resource": {
+        "type": "object",
         "required": [
-          "designation",
-          "email",
           "name",
-          "password",
+          "email",
           "phoneNumber",
           "skype",
-          "technology"
+          "designation",
+          "technology",
+          "password"
         ],
-        "type": "object",
         "properties": {
           "name": {
             "type": "string",
@@ -626,8 +652,8 @@ const docs = {
           },
           "skype": {
             "type": "string",
-            "description": "skype im handle",
-            "example": "live:jonhskype"
+            "example": "live:jonhskype",
+            "description": "skype im handle"
           },
           "designation": {
             "type": "string",
@@ -654,11 +680,11 @@ const docs = {
         }
       },
       "login": {
+        "type": "object",
         "required": [
           "email",
           "password"
         ],
-        "type": "object",
         "properties": {
           "email": {
             "type": "string",
@@ -672,10 +698,10 @@ const docs = {
         }
       },
       "forgot_password": {
+        "type": "object",
         "required": [
           "email"
         ],
-        "type": "object",
         "properties": {
           "email": {
             "type": "string"
@@ -683,13 +709,13 @@ const docs = {
         }
       },
       "change_password": {
+        "type": "object",
         "required": [
-          "confirm_password",
           "email",
           "new_password",
+          "confirm_password",
           "old_password"
         ],
-        "type": "object",
         "properties": {
           "email": {
             "type": "string",
@@ -713,10 +739,10 @@ const docs = {
         }
       },
       "leaves": {
+        "type": "object",
         "required": [
           "date"
         ],
-        "type": "object",
         "properties": {
           "date": {
             "type": "string",
@@ -725,8 +751,8 @@ const docs = {
           },
           "id": {
             "type": "integer",
-            "description": "id of employee",
             "format": "int32",
+            "description": "id of employee",
             "example": 1
           }
         }
@@ -736,13 +762,13 @@ const docs = {
         "properties": {
           "date": {
             "type": "string",
-            "description": "date in DD-MMM-YYYY format",
-            "format": "date"
+            "format": "date",
+            "description": "date in DD-MMM-YYYY format"
           },
           "empid": {
             "type": "integer",
-            "description": "id of employee",
-            "format": "int32"
+            "format": "int32",
+            "description": "id of employee"
           },
           "leave": {
             "type": "string",
@@ -762,8 +788,8 @@ const docs = {
             "properties": {
               "id": {
                 "type": "integer",
-                "description": "id of existing user",
                 "format": "int32",
+                "description": "id of existing user",
                 "example": 1
               },
               "email": {
@@ -820,16 +846,59 @@ const docs = {
             "example": "nodejs developer"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+      "checkweeklyAttendance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "date": {
+            "type": "string",
+            "example": "31-Aug-2020"
+          },
+          "project": {
+            "type": "boolean",
+            "example": "true/false"
+          }
+        },
+        "required": [
+          "id",
+          "date"
+        ]
+      },
+      "deleteUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "addtoProject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "required": [
+          "id"
+        ]
       }
     }
   }
 }
 
-module.exports = {docs};
+module.exports = {
+  docs
+};
