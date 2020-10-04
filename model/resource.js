@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 autoIncrement = require("mongoose-auto-increment");
-const connection = mongoose.createConnection("mongodb://localhost/test");
-autoIncrement.initialize(connection);
+autoIncrement.initialize(mongoose.connection);
 
-var resource = new Schema({
+const resource = new Schema({
   name: { type: String, required: true },
   email: {
     type: String,
@@ -31,5 +30,5 @@ resource.plugin(autoIncrement.plugin, {
   field: "id",
   startAt: 1,
 });
-var resources = mongoose.model("resource", resource);
+const resources = mongoose.model("resource", resource);
 module.exports = resources;

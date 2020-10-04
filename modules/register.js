@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const validate = (req, res, next) => {
-    var { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
+    const { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
         if (!name) {
             throw new Error("Name not provided.");
@@ -29,7 +29,7 @@ const validate = (req, res, next) => {
             throw new Error("Password not provided.");
         }
         else {
-            var emailValid = validator.validate(email);
+            const emailValid = validator.validate(email);
             if (!emailValid) {
                 throw new Error("Invalid email.");
             }
@@ -45,7 +45,7 @@ const validate = (req, res, next) => {
 const resourceExists = async (req, res, next) => {
     const email = req.body.email;
     try {
-        var existing = await model.find({ email: email });
+        const existing = await model.find({ email: email });
         if (existing.length > 0) {
             // console.log(existing);
             res.status(409).send({
@@ -66,7 +66,7 @@ const resourceExists = async (req, res, next) => {
 }
 
 const register = async (req, res, next) => {
-    var { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
+    const { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
         //hash the password
         const hashPass = await bcrypt.hash(password, saltRounds);
@@ -74,7 +74,7 @@ const register = async (req, res, next) => {
         // const date = moment(new Date).format("DD-MMM-YYYY");
         const date = new Date();
         //sanity check for project
-        var project = project === true;
+        // var project = project === true;
         //Create record
         let newResource = new model({
             name: name,

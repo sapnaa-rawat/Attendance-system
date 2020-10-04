@@ -19,7 +19,7 @@ const validate = (req, res, next) => {
     next();
 }
 
-const show_Holidays = (req, res) => {
+const show_Holidays = (req, res, next) => {
     holiday_List = holidayList.find().catch((err) => err);
     res.send(holiday_List);
 }
