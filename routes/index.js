@@ -1,6 +1,6 @@
 const express = require('express');
-const missingdate = require('../modules/missingdate');
 const router = express.Router();
+const missingdate = require('../modules/missingdate');
 const checkAttendance = require("../modules/dailyattendance")
 const loginHandler = require('../modules/logIn');
 const forget_password = require("../modules/forget_password");
@@ -17,34 +17,32 @@ router.post('/register', register.validate, register.resourceExists, register.re
 
 router.post('/login', loginHandler.login); //login user API
 
-router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
+router.post("/forgot_Password", forget_password.forgot_Password); //Forgot password API
 
 //Shows all the mandatory holidays
 
-router.route("/holidays").post(show_Holidays.show_Holidays);
+router.get("/holidays", show_Holidays.show_Holidays);
 
-router.use(loginHandler.validateToken); //using Auth middleware for below API's
+router.post("/deleteuser", loginHandler.validateToken, deleteuser.deleteUser);
 
-router.route("/deleteuser").post(deleteuser.deleteUser);
+router.post("/addtoproject", loginHandler.validateToken, addtoproject.addUsertoProject);
 
-router.route("/addtoproject").post(addtoproject.addUsertoProject);
+router.post('/change_Password', loginHandler.validateToken, forget_password.change_Password); //Change PASSWORD
 
-router.post('/change_Password', forget_password.change_Password); //Change PASSWORD
+router.post('/dailycheck',loginHandler.validateToken,  checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/dailycheck', checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
+router.post('/markattendance', loginHandler.validateToken, Attendance.check_Weekend, Attendance.markAttendance);
 
-router.post('/markattendance', Attendance.check_Weekend, Attendance.markAttendance);
+router.get('/checkWeeklyAttendance', loginHandler.validateToken, weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
 
-router.route("/checkWeeklyAttendance").get(weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.get('/missedattendance', loginHandler.validateToken, missingdate.missingDates);
 
-router.get('/missedattendance', missingdate.missingDates);
+router.post('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.getLeaveOnDate);
 
-router.post('/dailyleaves', leaves.dateIsValid, leaves.getLeaveOnDate);
-
-router.post('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+router.post('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
 router.post('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
 
-router.post('/mandatoryholiday', show_Holidays.validate, show_Holidays.holiday);
+router.post('/mandatoryholiday', loginHandler.validateToken, show_Holidays.validate, show_Holidays.holiday);
 
 module.exports = router;

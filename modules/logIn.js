@@ -11,8 +11,8 @@ const generateSecret = async () => {
 
 //finds all employees involved in a project
 const findEmpInProject = async () => {
-    var empsAllDetails = await resource.find({ project: true, deleted: false });
-    var emps = await empsAllDetails.map((value, index) => {
+    const empsAllDetails = await resource.find({project: true, deleted: false});
+    const emps = await empsAllDetails.map((value, index) => {
         return {
             name: value.name,
             email: value.email,
@@ -25,62 +25,56 @@ const findEmpInProject = async () => {
 }
 
 const validateToken = (req, res, next) => {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization;
     if (!token) {
-        res.status(401).send({ message: "Unauthorised." });
+        return res.status(401).send({message: "Unauthorised."});
     }
     try {
-        const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+        const verified = jwt.verify(token.split(" ")[1], process.env.TOKEN_SECRET);
         req.user = verified;
         next();
     } catch (error) {
-        res.status(401).send({ message: "Invalid token.", error: `${error}` });
+        res.status(401).send({message: "Invalid token.", error: `${error}`});
     }
 }
 
 const login = async (req, res, next) => {
-    var { email, password } = req.body;
+    const {email, password} = req.body;
     // null check
     if (email.length === 0) {
-        return res.status(400).json({ message: "Please provide an email." });
+        return res.status(400).json({message: "Please provide an email."});
     }
-    else if (password.length === 0) {
-        return res.status(400).json({ message: "Please provide a password." });
+    if (password.length === 0) {
+        return res.status(400).json({message: "Please provide a password."});
     }
+    try {
+        const user = await resource.findOne({email: email});
+        const match = user && await bcrypt.compare(password, user.password);
 
-    else {
-        try {
-            const user = await resource.findOne({ email: email });
-            const hashed_pass = user.password;
-            const match = await bcrypt.compare(password, hashed_pass);
-
-            if (match) {
-                // Generate a random secret, this also invalidates previous login token
-                await generateSecret();
-                // sign JWT token
-                const token = jwt.sign({
-                    id: user.id,
-                    email: user.email
-                }, process.env.TOKEN_SECRET, { expiresIn: '3h' });
-                //Get employees in a project
-                var empsInProject = await findEmpInProject();
-                if (empsInProject.length === 0) {
-                    empsInProject = "Currently no employees in a project.";
-                }
-                res.status(200).header('authorization', `Bearer ${token}`).send({
-                    message: "Login sucessful",
-                    token: token,
-                    employees: empsInProject
-                });
+        if (match) {
+            // Generate a random secret, this also invalidates previous login token
+            await generateSecret();
+            // sign JWT token
+            const token = jwt.sign({
+                id: user.id,
+                email: user.email
+            }, process.env.TOKEN_SECRET, {expiresIn: '90 days'});
+            //Get employees in a project
+            let empsInProject = await findEmpInProject();
+            if (empsInProject.length === 0) {
+                empsInProject = "Currently no employees in a project.";
             }
-            else {
-                res.status(400).send({ message: "Invalid password." });
-            }
+            res.status(200).header('authorization', `Bearer ${token}`).send({
+                message: "Login sucessful",
+                token: token,
+                employees: empsInProject
+            });
+        } else {
+            throw Error();
         }
-        catch (err) {
-            res.status(404).send({ message: "No such user.", error: `${err}` });
-        }
+    } catch (err) {
+        res.status(404).send({message: "Invalid username/password"});
     }
 }
 
-module.exports = { validateToken, login };
+module.exports = {validateToken, login};
