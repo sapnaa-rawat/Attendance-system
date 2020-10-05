@@ -1,91 +1,37 @@
-var attendance = require('../model/attendance')
-
-var moment = require('moment');
+const moment = require('moment');
 const resources = require('../model/resource');
+const attendances = require('../model/attendance');
 
 
-function markAttendance(req, res) {
+const check_Weekend = (req, res, next) => {
   let body = req.body;
-  let empattendance_data = body.map((item) => {
-    return item.empid;
-  })
- 
-  resources.find({
-    "id": empattendance_data,
-    "project": true
-  }, (err, result) => {
-    if (err) {
-      return err
-    } else {
-      
-      result.map((data)=>{
-        console.log(data);
-        body.map((item) => {
-          if(data.id == item.empid){
-            console.log(item);
-          attendance.find({"empid" : data.id, "date" : item.date}, (err,result) => {
-          if(err) {return err}
-          console.log(result)
-          if (result.length==0){
-            
-            let attendancedata = new attendance({
-                     date: item.date,
-                     empattendance: item.empattendance,
-              
-                     empid:data.id,
-                 project:data.project
-              
-                });
-              
-                   attendancedata
-                   .save((err) => {
-                    if (err) {
-                        return res.send(404, {
-                            message: "Not Found"
-                        })
-                      }
-                      })
-                   }
-                   else {
-                    attendance.findOneAndUpdate({"empid" : data.id, "date" : item.date}, {"empid" : data.id, "date" : item.date, $set : {"empattendance" : item.empattendance}, "project" : data.project}, (err) => {
-                      if(err) {return err}
-                      })
-                   }
-          })
-          }
-        })
-      })
-      res.send({msg : "updated"});
+  body.forEach((item) => {
+    const verifyDate = moment(item.date, 'DD-MMM-YYYY').isAfter('31-jul-2020')
+    const date = new Date(item.date);
+    if (date.getDay() == 0 || date.getDay() == 6 || (!(verifyDate))){
+      return res.send({"msg": `holiday on this ${item.date} `})
     }
   })
+  next();
 }
 
-
-
-/*
-function is_weekend(req, res, next) {
-  let dateforsearch = req.body.date;
-  var dt = new Date(dateforsearch);
-  var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
-  console.log(verifyDate,"heyyy")
-
-
-  if ( dt.getDay() == 0 && dt.getDay() == 6 && verifyDate ==true) {
-    console.log(dt)
-    return res.send("holiday");
-  }
-  else {
-    
-        next()
- 
+const markAttendance = async (req, res) => {
+  const body = req.body;
+  const empattendance_data = body.map((item) => item.empid);
+  const resource_data = await resources.find({"id" : empattendance_data, "project" : true, "deleted" : false}).catch((err) => console.log(err));
+  const resource_id = resource_data.map((item) => item.id);
+  body.map((item) => {
+    if(resource_id.includes(item.empid)){
+      attendances.findOneAndUpdate({"empid": item.empid, "date" : item.date}, {$set : {"empattendance" : item.empattendance, "project" : true}}, {upsert : true}, (err) => {
+        if(err) {return res.send(err);}
+      })
+    }
+  })
+  res.send("ok");
 }
 
-}*/
 
 module.exports = {
   markAttendance,
- 
-  //is_weekend
+  check_Weekend
 }
-
-

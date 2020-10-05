@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 
-var attendance = new Schema({
+const attendance = new Schema({
   name: {
     type: String
   },
@@ -23,6 +23,6 @@ var attendance = new Schema({
 });
 
 
-var attendances = mongoose.model("attendance", attendance);
+const attendances = mongoose.model("attendance", attendance);
 
 module.exports = attendances;
