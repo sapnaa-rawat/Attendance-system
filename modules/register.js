@@ -1,5 +1,4 @@
 var model = require('../model/resource');
-var moment = require('moment');
 var validator = require("email-validator");
 var bcrypt = require('bcrypt');
 

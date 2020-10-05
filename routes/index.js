@@ -19,9 +19,9 @@ router.post('/change_Password', loginHandler.validateToken, forget_password.chan
 
 router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', loginHandler.validateToken, Attendance.findIdfromemail, Attendance.markAttendance);
-
-router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.findIdfromemail, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.post('/markattendance', loginHandler.validateToken, Attendance.markAttendance);
+// Attendance.is_weekend,
+router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 
@@ -34,5 +34,7 @@ router.route("/addtoproject").post(addtoproject.addUsertoProject);
 router.get('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.getLeaveOnDate);
 
 router.get('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+
+router.get('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
 
 module.exports = router;
