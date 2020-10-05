@@ -1,5 +1,4 @@
 const moment = require('moment');
-const resources = require('../model/resource');
 const attendances = require('../model/attendance');
 
 
@@ -17,17 +16,13 @@ const check_Weekend = (req, res, next) => {
 
 const markAttendance = async (req, res) => {
   const body = req.body;
-  const empattendance_data = body.map((item) => item.empid);
-  const resource_data = await resources.find({"id" : empattendance_data, "project" : true, "deleted" : false}).catch((err) => console.log(err));
-  const resource_id = resource_data.map((item) => item.id);
-  body.map((item) => {
-    if(resource_id.includes(item.empid)){
-      attendances.findOneAndUpdate({"empid": item.empid, "date" : item.date}, {$set : {"empattendance" : item.empattendance, "project" : true}}, {upsert : true}, (err) => {
-        if(err) {return res.send(err);}
-      })
-    }
-  })
-  res.send("ok");
+  const queryMap = body.map(async (item) => {
+      return await attendances.findOneAndUpdate({
+        "empid": item.empid,
+        "date": item.date
+      }, {$set: {empattendance: item.empattendance, project: true}}, {upsert: true});
+  });
+  Promise.all(queryMap).then(([...results]) => res.status(200).send({"message":"ok",results})).catch((err) => res.status(200).send(err));
 }
 
 
