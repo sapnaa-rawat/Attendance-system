@@ -19,8 +19,8 @@ router.post('/change_Password', loginHandler.validateToken, forget_password.chan
 
 router.get('/dailycheck', loginHandler.validateToken, checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', loginHandler.validateToken, Attendance.markAttendance);
-// Attendance.is_weekend,
+router.post('/markattendance', Attendance.markAttendance);
+//  loginHandler.validateToken,Attendance.is_weekend,
 router.route("/checkWeeklyAttendance").get(loginHandler.validateToken, weeklyAttendanceCheck.is_notweekend, weeklyAttendanceCheck.weeklyAttendance);
 
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API

@@ -1,5 +1,4 @@
-var attendance = require('../model/attendance')
-
+const attendance = require('../model/attendance')
 var moment = require('moment');
 const resources = require('../model/resource');
 
@@ -26,7 +25,7 @@ function markAttendance(req, res) {
           attendance.find({"empid" : data.id, "date" : item.date}, (err,result) => {
           if(err) {return err}
           console.log(result)
-          if (result.length==0){
+          if ((result.length==0)|| (moment(item.date, 'DD-MMM-YYYY',true).isValid())){
             
             let attendancedata = new attendance({
                      date: item.date,
@@ -55,7 +54,7 @@ function markAttendance(req, res) {
           }
         })
       })
-      res.send({msg : "updated"});
+     res.send({msg : "updated"});
     }
   })
 }
@@ -64,7 +63,7 @@ function markAttendance(req, res) {
 
 /*
 function is_weekend(req, res, next) {
-  let dateforsearch = req.body.date;
+  let dateforsearch = req.body.date;    
   var dt = new Date(dateforsearch);
   var verifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-jul-2020')
   console.log(verifyDate,"heyyy")
