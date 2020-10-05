@@ -33,7 +33,7 @@ router.post('/dailycheck',loginHandler.validateToken,  checkAttendance.validatio
 
 router.post('/markattendance', loginHandler.validateToken, Attendance.check_Weekend, Attendance.markAttendance);
 
-router.get('/checkWeeklyAttendance', loginHandler.validateToken, weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.post('/checkWeeklyAttendance', loginHandler.validateToken, weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
 
 router.get('/missedattendance', loginHandler.validateToken, missingdate.missingDates);
 

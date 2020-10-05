@@ -9,7 +9,7 @@ const attendance = new Schema({
   empattendance: {
     type: String,
     required: true,
-    enum: ['p', 'PNB', 'PL', 'UPL', 'HD', 'H', 'OH', 'WFH', 'UCL', 'PCL']
+    enum: ['P', 'PNB', 'PL', 'UPL', 'HD', 'H', 'OH', 'WFH', 'UCL', 'PCL']
   },
   empid: {
     type: Number,
