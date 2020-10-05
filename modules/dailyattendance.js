@@ -1,69 +1,81 @@
 const moment = require("moment");
 const empattendance = require("../model/attendance");
-const holidays=require("../model/holiday");
+const holidays = require("../model/holiday");
 
 
 const validation = (req, res, next) => {
-    var date = req.body.date;
-
-    var exitsdate = moment(date, 'DD-MMM-YYYY').isAfter('31-jul-2020')
-    if (exitsdate === true) {
-        next();
-    }
-    else {
-        res.status(422).json({ message: "No data for " + date })
+    const {date} = req.body;
+    if (moment(date, 'DD-MMM-YYYY').isValid()) {
+        const dateExists = moment(date, 'DD-MMM-YYYY').isAfter('31-Jul-2020');
+        if (dateExists) {
+            next();
+        } else {
+            res.status(422).json({message: "No data for " + date});
+        }
+    } else {
+        res.status(404).json({message: "invalid Date"});
     }
 }
 
 const attendance = async (req, res, next) => {
-    var date = req.body.date;
-    var empid = req.body.empid;
-    var now = moment(date, 'DD-MMM-YYYY');
-
-    if (now.isValid()) {
-        var week = now.day();
+    const {date, empid} = req.body;
+    const now = moment(date, 'DD-MMM-YYYY');
+    const week = now.day();
+    try {
+        const find = {
+            project: true
+        };
+        if (!!empid) {
+            find.empid = empid;
+        }
         if (week == 0 || week == 6) {
-            res.status(200).json({ message: "no data for saturday and sunday" })
-
-        }
-        else {
-            if (empid === undefined) {
-                var result = await empattendance.find({ "date": date, "project": true });
-
-                if (result.length === 0) {
-                    return res.status(404).json({ message: "attendance not filled" });
+            res.status(200).json({message: "no data for saturday and sunday"});
+        } else {
+            find.date = date;
+            const project = {
+                "_id": 1,
+                "date": 1,
+                "empattendance": 1,
+                "empid": 1,
+                "name": "$employee.name"
+            }
+            const result = await empattendance.aggregate([
+                {
+                    $match: find
+                },
+                {
+                    $lookup: {
+                        from: "resources", // collection to join
+                        localField: "empid",//field from the input documents
+                        foreignField: "id",//field from the documents of the "from" collection
+                        as: "employee"// output array field
+                    }
+                },
+                {
+                    $unwind: '$employee'
+                },
+                {
+                    $project: project
                 }
-                var temp = [];
-                result.forEach(function (key) {
-
-                    temp.push({ "empid": key.empid, "status": key.empattendance, "date": key.date });
-                });
-                return res.status(200).json(temp)
-            }
-            var result = await empattendance.find({ "empid": empid, "date": date });
-
+            ]);
             if (result.length === 0) {
-                return res.status(404).json({ message: "attendance not filled" });
+                return res.status(404).json({message: "attendance not filled"});
             }
-
-            res.status(200).json({ "empid": result[0].empid, "status": result[0].empattendance, "date": result[0].date });
-
-
+            return res.status(200).json(result);
         }
-    }
-
-    else {
-        res.status(404).json({ message: "invalid Date" })
+    } catch
+        (err) {
+        res.status(404).json(err);
     }
 }
 
 async function holiday(req, res, next) {
-    var date = req.body.date;
-  var result=await holidays.findOne({"holidayDate":date})
-if(result){
-    res.status(200).json({message:"holiday"})
-}
-next();
+    const {date} = req.body;
+    const result = await holidays.findOne({"holidayDate": date})
+    if (result) {
+        res.status(200).json({message: "holiday"});
+    }
+    next();
 }
 
 module.exports = {

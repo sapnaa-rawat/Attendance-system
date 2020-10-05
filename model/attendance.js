@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 
-var attendance = new Schema({
+const attendance = new Schema({
   name: {
     type: String
   },
   empattendance: {
     type: String,
     required: true,
-    enum: ['p', 'PNB', 'PL', 'UPL', 'HD', 'H', 'OH', 'WFH', 'UCL', 'PCL']
+    enum: ['P', 'PNB', 'PL', 'UPL', 'HD', 'H', 'OH', 'WFH', 'UCL', 'PCL']
   },
   empid: {
     type: Number,
@@ -23,6 +23,6 @@ var attendance = new Schema({
 });
 
 
-var attendances = mongoose.model("attendance", attendance);
+const attendances = mongoose.model("attendance", attendance);
 
 module.exports = attendances;

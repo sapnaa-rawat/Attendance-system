@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-var list = new Schema({
+const Schema = mongoose.Schema;
+const list = new Schema({
     holidayDate:[String]
 })
-var holidayList = mongoose.model("list", list);
+const holidayList = mongoose.model("list", list);
 module.exports = holidayList;
