@@ -3,19 +3,6 @@ const empattendance = require("../model/attendance");
 const holidays = require("../model/holiday");
 
 
-const validation = (req, res, next) => {
-    const {date} = req.body;
-    if (moment(date, 'DD-MMM-YYYY').isValid()) {
-        const dateExists = moment(date, 'DD-MMM-YYYY').isAfter('31-Jul-2020');
-        if (dateExists) {
-            next();
-        } else {
-            res.status(422).json({message: "No data for " + date});
-        }
-    } else {
-        res.status(404).json({message: "invalid Date"});
-    }
-}
 
 const attendance = async (req, res, next) => {
     const {date, empid} = req.body;
@@ -80,7 +67,6 @@ async function holiday(req, res, next) {
 
 module.exports = {
     holiday,
-    validation,
     attendance
 
 }

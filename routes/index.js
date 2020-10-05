@@ -11,7 +11,7 @@ const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
 const leaves = require('../modules/leaves');
 const show_Holidays = require('../modules/mandatoryholiday');
-
+const isnotweekend=require('../modules/middleware');
 
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 
@@ -29,17 +29,17 @@ router.post("/addtoproject", loginHandler.validateToken, addtoproject.addUsertoP
 
 router.post('/change_Password', loginHandler.validateToken, forget_password.change_Password); //Change PASSWORD
 
-router.post('/dailycheck',loginHandler.validateToken,  checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
+router.post('/dailycheck',loginHandler.validateToken,  isnotweekend, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', loginHandler.validateToken, Attendance.check_Weekend, Attendance.markAttendance);
+router.post('/markattendance', loginHandler.validateToken, isnotweekend, Attendance.markAttendance);
 
-router.post('/checkWeeklyAttendance', loginHandler.validateToken, weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.post('/checkWeeklyAttendance', loginHandler.validateToken,isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
 
 router.get('/missedattendance', loginHandler.validateToken, missingdate.missingDates);
 
-router.post('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.getLeaveOnDate);
+router.post('/dailyleaves', loginHandler.validateToken, isnotweekend, leaves.getLeaveOnDate);
 
-router.post('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+router.post('/weeklyleaves', loginHandler.validateToken, isnotweekend, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
 router.post('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
 

@@ -18,8 +18,7 @@ const attendance = new Schema({
   date: {
     type: String,
     require: true
-  },
-  project :{type:Boolean}
+  }
 });
 
 
