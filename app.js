@@ -27,12 +27,8 @@ db.once('open', function () {
   console.log("connection established");
 });
 
-// app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
-app.use('/apidocs', function(req, res, next){
-    SwaggerDocs.docs.host = req.get('host');
-    req.swaggerDoc = SwaggerDocs.docs;
-    next();
-}, swaggerUi.serve, swaggerUi.setup());
+
+app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(SwaggerDocs));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
