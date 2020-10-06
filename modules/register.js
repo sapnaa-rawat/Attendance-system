@@ -1,8 +1,9 @@
 const model = require('../model/resource');
 const validator = require("email-validator");
 const bcrypt = require('bcrypt');
+const constants=require("../modules/constants");
 
-const saltRounds = 10;
+const saltRounds = constants.constant_Data.SALTROUNDS;
 
 const validate = (req, res, next) => {
     const { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;

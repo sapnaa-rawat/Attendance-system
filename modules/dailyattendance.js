@@ -1,12 +1,13 @@
 const moment = require("moment");
 const empattendance = require("../model/attendance");
 const holidays = require("../model/holiday");
+const constants=require('../modules/constants');
 
 
 const validation = (req, res, next) => {
     const {date} = req.body;
-    if (moment(date, 'DD-MMM-YYYY').isValid()) {
-        const dateExists = moment(date, 'DD-MMM-YYYY').isAfter('31-Jul-2020');
+    if (moment(date,constants.constant_Data.DATE_FORMATE).isValid()) {
+        const dateExists = moment(date, constants.constant_Data.DATE_FORMATE).isAfter(constants.constant_Data.DB_STARTS_DATE);
         if (dateExists) {
             next();
         } else {
@@ -19,7 +20,7 @@ const validation = (req, res, next) => {
 
 const attendance = async (req, res, next) => {
     const {date, empid} = req.body;
-    const now = moment(date, 'DD-MMM-YYYY');
+    const now = moment(date, constants.constant_Data.DATE_FORMATE);
     const week = now.day();
     try {
         const find = {
