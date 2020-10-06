@@ -2,20 +2,6 @@ const moment = require('moment-timezone')
 const attendanceModel = require('../model/attendance');
 const constants=require('../modules/constants');
 
-const isnotweekend = (req, res, next) => {
-    const dateforcheck = req.body.date;
-    const dt = moment(dateforcheck);
-    const varifyDate = moment(dateforcheck, constants.constant_Data.DATE_FORMATE).isAfter(constants.constant_Data.DB_STARTS_DATE);
-    
-    if (dt.day() == 1 && varifyDate == true) {
-        next();
-    } else {
-        return res.status(422).send({
-            msg: 'not a valid date to find attendance of whole week'
-        });
-    }
-
-}
 
 const weeklyAttendance = async (req, res, next) => {
     const id = req.body.id;
@@ -66,6 +52,5 @@ const weeklyAttendance = async (req, res, next) => {
 }
 
 module.exports = {
-    weeklyAttendance,
-    isnotweekend
+    weeklyAttendance
 }

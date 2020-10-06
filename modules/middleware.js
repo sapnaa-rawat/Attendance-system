@@ -1,8 +1,9 @@
 const moment = require("moment");
+const constants=require('../modules/constants');
 const dateIsValid = (req, res, next) => {
     const date = moment(req.body.date);
     const week = date.day();
-    const varifyDate = moment(date ,'DD-MMM-YYYY').isAfter('31-Jul-2020');
+    const varifyDate = moment(date ,constants.constant_Data.DATE_FORMATE).isAfter(constants.constant_Data.DB_STARTS_DATE);
     if (varifyDate == true) {
         
     if (week == 0 || week == 6) {
