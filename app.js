@@ -7,12 +7,11 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const swaggerUi = require("swagger-ui-express");
 const SwaggerDocs = require('./swagger_docs');
-
+const validateToken=require("./modules/logIn")
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const app = express();
 app.use(helmet());
-
 //mongo db server connection
 mongoose.connect('mongodb://localhost/kellton_attendance', {
     useNewUrlParser: true,
@@ -28,28 +27,8 @@ db.once('open', function () {
 });
 
 //middleware for all paths
-app.all('*', validateToken);
+app.all('*', validateToken.validateToken);
 
-function validateToken(req, res, next) {
-
-        if ( req.path == '/api/v1/register'|| req.path=='/api/v1/holidays'|| req.path == '/api/v1/login'|| req.path == '/api/v1/forgot_Password'|| req.path=='/api/v1/apidocs') 
-            return next();
-
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).send({message: "Unauthorised."});
-        }
-        try {
-            const verified = jwt.verify(token.split(" ")[1], process.env.TOKEN_SECRET);
-            req.user = verified;
-            next();
-        } catch (error) {
-            res.status(401).send({message: "Invalid token.", error: `${error}`});
-        }
-
-  next();
-
-}
 
 // app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
 app.use('/apidocs', function (req, res, next) {
