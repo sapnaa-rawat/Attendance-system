@@ -1,10 +1,12 @@
 const moment = require('moment-timezone')
 const attendanceModel = require('../model/attendance');
+const constants=require('../modules/constants');
 
 const isnotweekend = (req, res, next) => {
-    const dateforsearch = req.body.date;
-    const dt = moment(dateforsearch);
-    const varifyDate = moment(dateforsearch, 'DD-MMM-YYYY').isAfter('31-Jul-2020');
+    const dateforcheck = req.body.date;
+    const dt = moment(dateforcheck);
+    const varifyDate = moment(dateforcheck, constants.constant_Data.DATE_FORMATE).isAfter(constants.constant_Data.DB_STARTS_DATE);
+    
     if (dt.day() == 1 && varifyDate == true) {
         next();
     } else {
@@ -17,10 +19,10 @@ const isnotweekend = (req, res, next) => {
 
 const weeklyAttendance = async (req, res, next) => {
     const id = req.body.id;
-    const dateforsearch = moment(req.body.date).format('DD-MMM-YYYY');
+    const dateforsearch = moment(req.body.date).format(constants.constant_Data.DATE_FORMATE);
     // ******** Getting rid of loop ******** //
     // end date is non inclusive (because of using $lt and not $lte), so add 6 instead of 5
-    const enddate = moment(dateforsearch).add(6, 'days').format('DD-MMM-YYYY');
+    const enddate = moment(dateforsearch).add(6, 'days').format(constants.constant_Data.DATE_FORMATE);
     const project = {
         "_id": 1,
         "date": 1,
@@ -29,7 +31,6 @@ const weeklyAttendance = async (req, res, next) => {
         "name": "$employee.name"
     }
     const find = {
-        project: true,
         date: {$gte: dateforsearch, $lt: enddate}
     }
     if (!!id) {

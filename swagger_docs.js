@@ -10,13 +10,10 @@ const docs = {
     },
     "version": "1.0.0-oas3"
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000/api/v1"
-    }
-  ],
-  "tags": [
-    {
+  "servers": [{
+    "url": "http://localhost:3000/api/v1"
+  }],
+  "tags": [{
       "name": "Register & Login",
       "description": "Register & Login"
     },
@@ -41,11 +38,9 @@ const docs = {
       "description": "Admin has right to change"
     }
   ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
+  "security": [{
+    "bearerAuth": []
+  }],
   "paths": {
     "/register": {
       "post": {
@@ -198,11 +193,9 @@ const docs = {
             "description": "No such user."
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": [{
+          "bearerAuth": []
+        }]
       }
     },
     "/markattendance": {
@@ -212,17 +205,16 @@ const docs = {
         ],
         "summary": "mark attendance",
         "operationId": "markattendance",
-        "requestBody": {
-          "description": "New resource information",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/markAttendance"
-              }
-            }
-          },
-          "required": true
-        },
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
+          }
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -231,28 +223,27 @@ const docs = {
       }
     },
     "/missedattendance": {
-      "get": {
+      "post": {
         "tags": [
           "Attendance"
         ],
-        "summary": "Missed Attendance",
-        "operationId": "missed_attendance",
+        "summary": "missed attendance",
+        "operationId": "missedattendance",
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
+          }
+        }],
         "responses": {
-          "200": {
-            "description": "return array of dates"
-          },
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "$ref": "#/components/schemas/missedAttendance"
-              }
-            }
-          },
-        },
-        "security": [{
-          "bearerAuth": []
-        }]
+          "405": {
+            "description": "Invalid input"
+          }
+        }
       }
     },
     "/dailycheck": {
@@ -262,18 +253,16 @@ const docs = {
         ],
         "summary": "daily check",
         "operationId": "dailycheck",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -313,11 +302,9 @@ const docs = {
             "description": "No such user."
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": [{
+          "bearerAuth": []
+        }]
       }
     },
     "/holidays": {
@@ -327,18 +314,16 @@ const docs = {
         ],
         "summary": "holidays",
         "operationId": "holidays",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -378,11 +363,9 @@ const docs = {
             "description": "No such user."
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": [{
+          "bearerAuth": []
+        }]
       }
     },
     "/addtoproject": {
@@ -484,8 +467,7 @@ const docs = {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
+                    "oneOf": [{
                         "$ref": "#/components/schemas/leaves-details"
                       },
                       {
@@ -543,8 +525,7 @@ const docs = {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
+                    "oneOf": [{
                         "$ref": "#/components/schemas/leaves-details"
                       },
                       {
@@ -573,18 +554,16 @@ const docs = {
         ],
         "summary": "mandatoryholiday",
         "operationId": "mandatoryholiday",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/change_password"
-            }
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "required": true,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "$ref": "#/components/schemas/change_password"
           }
-        ],
+        }],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -915,62 +894,11 @@ const docs = {
         "required": [
           "id"
         ]
-      },
-      "markAttendance": {
-        "type": "object",
-        "required": [
-          "empattendance",
-          "empid",
-          "date"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "John Doe"
-          },
-          "empattendance": {
-            "type": "string",
-            "enum": [
-              "p",
-              "PNB",
-              "PL",
-              "UPL",
-              "HD",
-              "H",
-              "OH",
-              "WFH",
-              "UCL",
-              "PCL"
-            ]
-          },
-          "empid": {
-            "type": "integer",
-            "format": "int32",
-            "example": 1
-          },
-          "date": {
-            "type": "string",
-            "description": "date in DD-MMM-YYYY format",
-            "format": "date",
-            "example": "10-Aug-2020"
-          },
-          "missedAttendance":{
-            "type": "object",
-            "properties": {
-                "date": {
-                  "type": "string",
-                  "format": "date",
-                  "description": "date in DD-MMM-YYYY format"
-                }
-            }
-          }
-        }
       }
     }
   }
 }
+
 module.exports = {
   docs
 };
-
- 

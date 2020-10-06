@@ -1,6 +1,6 @@
 module.exports = {
     constant_Data: {
-        DB_STARTS_DATE : "2020-07-31",
+        DB_STARTS_DATE : '31-Jul-2020',
         SALTROUNDS : 10,
         USER : "noreplymailed2020@gmail.com",
         PASSWORD : "noReply@12345",
@@ -14,5 +14,6 @@ module.exports = {
         FORGET_BODY_MAIL : (name, password) => {
             return `Hi ${name},<br><br> Here is the new password- <b>${password}</b><br><br>If password reset wasn’t intended: If you didn't make the request, just ignore this email.<br><br>Thanks <br><br>`
         },
+        DATE_FORMATE:'DD-MMM-YYYY',
     }
 }
