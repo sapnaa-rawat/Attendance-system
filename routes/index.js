@@ -23,11 +23,11 @@ router.post("/forgot_Password", forget_password.forgot_Password); //Forgot passw
 
 router.get("/holidays", show_Holidays.show_Holidays);
 
-router.post("/deleteuser", loginHandler.validateToken, deleteuser.deleteUser);
+router.post("/deleteuser", deleteuser.deleteUser);
 
-router.post("/addtoproject", loginHandler.validateToken, addtoproject.addUsertoProject);
+router.post("/addtoproject", addtoproject.addUsertoProject);
 
-router.post('/change_Password', loginHandler.validateToken, forget_password.change_Password); //Change PASSWORD
+router.post('/change_Password', forget_password.change_Password); //Change PASSWORD
 
 router.post('/dailycheck',loginHandler.validateToken,  isnotweekend, checkAttendance.holiday, checkAttendance.attendance);
 
@@ -35,14 +35,14 @@ router.post('/markattendance', loginHandler.validateToken, isnotweekend, Attenda
 
 router.post('/checkWeeklyAttendance', loginHandler.validateToken,isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
 
-router.get('/missedattendance', loginHandler.validateToken, missingdate.missingDates);
+router.get('/missedattendance', missingdate.missingDates);
 
 router.post('/dailyleaves', loginHandler.validateToken, isnotweekend, leaves.getLeaveOnDate);
 
 router.post('/weeklyleaves', loginHandler.validateToken, isnotweekend, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
-router.post('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
+router.post('/monthlyleaves', leaves.getmonthlyLeaves);
 
-router.post('/mandatoryholiday', loginHandler.validateToken, show_Holidays.validate, show_Holidays.holiday);
+router.post('/mandatoryholiday', show_Holidays.validate, show_Holidays.holiday);
 
 module.exports = router;

@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+abc@gmail.com
+=======
+test3@gmail.com
+>>>>>>> ddcec97c3b7502d51a2ae51055c8637c5bf89975
+=======
 tags: 
  *          - "Register & Login"
  *      summary: "Login"
@@ -16,3 +23,4 @@ tags:
  *      responses:
  *          '201':
  *          description: Successfully created user
+>>>>>>> 3d090d1836d1fe6cead03fb9ee7b00fd646da756

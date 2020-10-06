@@ -27,6 +27,30 @@ db.once('open', function () {
     console.log("connection established");
 });
 
+//middleware for all paths
+app.all('*', validateToken);
+
+function validateToken(req, res, next) {
+
+        if ( req.path == '/api/v1/register'|| req.path=='/api/v1/holidays'|| req.path == '/api/v1/login'|| req.path == '/api/v1/forgot_Password'|| req.path=='/api/v1/apidocs') 
+            return next();
+
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).send({message: "Unauthorised."});
+        }
+        try {
+            const verified = jwt.verify(token.split(" ")[1], process.env.TOKEN_SECRET);
+            req.user = verified;
+            next();
+        } catch (error) {
+            res.status(401).send({message: "Invalid token.", error: `${error}`});
+        }
+
+  next();
+
+}
+
 // app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
 app.use('/apidocs', function (req, res, next) {
     SwaggerDocs.docs.host = req.get('host');
