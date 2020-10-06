@@ -23,26 +23,26 @@ router.post("/forgot_Password", forget_password.forgot_Password); //Forgot passw
 
 router.get("/holidays", show_Holidays.show_Holidays);
 
-router.post("/deleteuser", loginHandler.validateToken, deleteuser.deleteUser);
+router.post("/deleteuser", deleteuser.deleteUser);
 
-router.post("/addtoproject", loginHandler.validateToken, addtoproject.addUsertoProject);
+router.post("/addtoproject", addtoproject.addUsertoProject);
 
-router.post('/change_Password', loginHandler.validateToken, forget_password.change_Password); //Change PASSWORD
+router.post('/change_Password', forget_password.change_Password); //Change PASSWORD
 
-router.post('/dailycheck',loginHandler.validateToken,  checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
+router.post('/dailycheck',  checkAttendance.validation, checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', loginHandler.validateToken, Attendance.check_Weekend, Attendance.markAttendance);
+router.post('/markattendance', Attendance.check_Weekend, Attendance.markAttendance);
 
-router.post('/checkWeeklyAttendance', loginHandler.validateToken, weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.post('/checkWeeklyAttendance', weeklyAttendanceCheck.isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
 
-router.get('/missedattendance', loginHandler.validateToken, missingdate.missingDates);
+router.get('/missedattendance', missingdate.missingDates);
 
-router.post('/dailyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.getLeaveOnDate);
+router.post('/dailyleaves', leaves.dateIsValid, leaves.getLeaveOnDate);
 
-router.post('/weeklyleaves', loginHandler.validateToken, leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+router.post('/weeklyleaves', leaves.dateIsValid, leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
-router.post('/monthlyleaves', loginHandler.validateToken, leaves.getmonthlyLeaves);
+router.post('/monthlyleaves', leaves.getmonthlyLeaves);
 
-router.post('/mandatoryholiday', loginHandler.validateToken, show_Holidays.validate, show_Holidays.holiday);
+router.post('/mandatoryholiday', show_Holidays.validate, show_Holidays.holiday);
 
 module.exports = router;
