@@ -23,6 +23,7 @@
     "morgan": "~1.9.1",
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.4.11",
+    "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {

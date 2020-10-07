@@ -4,19 +4,6 @@ const holidays = require("../model/holiday");
 const constants=require('../modules/constants');
 
 
-const validation = (req, res, next) => {
-    const {date} = req.body;
-    if (moment(date,constants.constant_Data.DATE_FORMATE).isValid()) {
-        const dateExists = moment(date, constants.constant_Data.DATE_FORMATE).isAfter(constants.constant_Data.DB_STARTS_DATE);
-        if (dateExists) {
-            next();
-        } else {
-            res.status(422).json({message: "No data for " + date});
-        }
-    } else {
-        res.status(404).json({message: "invalid Date"});
-    }
-}
 
 const attendance = async (req, res, next) => {
     const {date, empid} = req.body;
@@ -81,7 +68,6 @@ async function holiday(req, res, next) {
 
 module.exports = {
     holiday,
-    validation,
     attendance
 
 }
