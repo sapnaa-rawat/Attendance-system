@@ -25,6 +25,7 @@ const findEmpInProject = async () => {
 }
 
 const validateToken = (req, res, next) => {
+   
     if ( req.path == '/api/v1/register'|| req.path=='/api/v1/holidays'|| req.path == '/api/v1/login'|| req.path == '/api/v1/forgot_Password'|| req.path=='/api/v1/apidocs') 
             return next();
 
