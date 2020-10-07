@@ -16,6 +16,7 @@ uploads
 
 # IDEs and editors
 /.idea
+/.vscode
 .project
 .classpath
 .c9/
@@ -46,4 +47,10 @@ testem.log
 Thumbs.db
 
 # Session storage files
-scratch/*
+/scratch
+/scratch/email
+
+# Personal Work File
+Personal.js
+test.yaml
+

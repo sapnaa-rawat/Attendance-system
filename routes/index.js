@@ -1,35 +1,48 @@
-var express = require('express');
+const express = require('express');
+const router = express.Router();
 const missingdate = require('../modules/missingdate');
-var router = express.Router();
-var checkAttendance=require("../modules/dailyattendance")
-var loginHandler = require('../modules/logIn');
+const checkAttendance = require("../modules/dailyattendance")
+const loginHandler = require('../modules/logIn');
 const forget_password = require("../modules/forget_password");
-var Attendance=require("../modules/attendance-record");
-var weeklyAttendanceCheck=require('../modules/weeklyAttendanceString');
-var register = require('../modules/register')
-const deleteuser=require("../modules/deleteApi");
-const addtoproject=require("../modules/projectApi");
+const Attendance = require("../modules/attendance-record");
+const weeklyAttendanceCheck = require('../modules/weeklyAttendanceString');
+const register = require('../modules/register')
+const deleteuser = require("../modules/deleteApi");
+const addtoproject = require("../modules/projectApi");
+const leaves = require('../modules/leaves');
+const show_Holidays = require('../modules/mandatoryholiday');
+const isnotweekend=require('../modules/middleware');
+
+router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 
 router.post('/login', loginHandler.login); //login user API
 
-router.route("/forgot_Password").post(forget_password.forgot_Password); //Forgot password API
+router.post("/forgot_Password", forget_password.forgot_Password); //Forgot password API
 
-router.post('/change_Password', forget_password.change_Password);
+//Shows all the mandatory holidays
 
-router.get('/dailycheck',loginHandler.validateToken,checkAttendance.validation,checkAttendance.holiday,checkAttendance.attendance);
+router.get("/holidays", show_Holidays.show_Holidays);
 
-router.post('/markattendance', Attendance.markAttendance);
-//,loginHandler.validateToken,  Attendance.findIdfromemail
-router.route("/checkWeeklyAttendance").get(loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,weeklyAttendanceCheck.is_notweekend,weeklyAttendanceCheck.weeklyAttendance);
+router.post("/deleteuser", deleteuser.deleteUser);
 
-router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
-//loginHandler.validateToken,weeklyAttendanceCheck.findIdfromemail,
+router.post("/addtoproject", addtoproject.addUsertoProject);
 
-router.get('/missedattendance',loginHandler.validateToken,missingdate.missing);
+router.post('/change_Password', forget_password.change_Password); //Change PASSWORD
 
-router.route("/deleteuser").post(deleteuser.deleteUser)
+router.post('/dailycheck', isnotweekend, checkAttendance.holiday, checkAttendance.attendance);
 
-router.route("/addtoproject").post(addtoproject.addUsertoProject)
+router.post('/markattendance', isnotweekend, Attendance.markAttendance);
 
+router.post('/checkWeeklyAttendance',isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
+
+router.get('/missedattendance', missingdate.missingDates);
+
+router.post('/dailyleaves',  isnotweekend, leaves.getLeaveOnDate);
+
+router.post('/weeklyleaves', isnotweekend, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+
+router.post('/monthlyleaves', leaves.getmonthlyLeaves);
+
+router.post('/mandatoryholiday', show_Holidays.validate, show_Holidays.holiday);
 
 module.exports = router;
