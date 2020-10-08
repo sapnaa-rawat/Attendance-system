@@ -10,6 +10,8 @@ const SwaggerDocs = require('./swagger_docs');
 const validateToken=require("./modules/logIn")
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const bodyParser = require('body-parser')
+const weekendCheck=require('./modules/middleware')
 const app = express();
 app.use(helmet());
 //mongo db server connection
@@ -26,8 +28,11 @@ db.once('open', function () {
     console.log("connection established");
 });
 
+app.use(bodyParser.json()) // for parsing application/json in middleware(req.body)
+
 //middleware for all paths
 app.all('*', validateToken.validateToken);
+app.all('*',weekendCheck)
 
 
 // app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(SwaggerDocs.docs));
