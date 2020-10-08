@@ -222,6 +222,7 @@ const docs = {
         }
       }
     },
+   
     "/missedattendance": {
       "post": {
         "tags": [
@@ -229,23 +230,21 @@ const docs = {
         ],
         "summary": "missed attendance",
         "operationId": "missedattendance",
-        "parameters": [{
-          "name": "email",
-          "in": "query",
-          "required": true,
-          "style": "form",
-          "explode": true,
-          "schema": {
-            "$ref": "#/components/schemas/change_password"
-          }
-        }],
         "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
+          "201": {
+            "description": "array of dates",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/Missed-Attendance"
+                    }
+                  }
+                }
+            }    
         }
       }
     },
+
     "/dailycheck": {
       "post": {
         "tags": [
@@ -894,7 +893,20 @@ const docs = {
         "required": [
           "id"
         ]
-      }
+      },
+
+      "Missed-Attendance":{
+        "type": "object",
+        "required": [
+          "Date"
+        ],
+        "properties": {
+          "Date": {
+            "type": "Date"
+          }
+        }
+      }      
+
     }
   }
 }
