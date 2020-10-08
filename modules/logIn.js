@@ -25,21 +25,26 @@ const findEmpInProject = async () => {
 }
 
 const validateToken = (req, res, next) => {
-    if ( req.path == '/api/v1/register'|| req.path=='/api/v1/holidays'|| req.path == '/api/v1/login'|| req.path == '/api/v1/forgot_Password'|| req.path=='/api/v1/apidocs') 
-            return next();
+   console.log(req.path);
+
+    if ( req.path == '/api/v1/deleteuser'|| req.path=='/api/v1/addtoproject'|| req.path == '/api/v1/change_Password'|| req.path == '/api/v1/dailycheck'|| req.path == '/api/v1/markattendance'|| req.path == '/api/v1/checkWeeklyAttendance'|| req.path == '/api/v1/missedattendance'|| req.path == '/api/v1/dailyleaves'|| req.path == '/api/v1/weeklyleaves'|| req.path=='/api/v1/monthlyleaves'|| req.path=='/api/v1/mandatoryholiday') 
+    {
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).send({message: "Unauthorised."});
+        }
+        try {
+            const verified = jwt.verify(token.split(" ")[1], process.env.TOKEN_SECRET);
+            req.user = verified;
+            next();
+        } catch (error) {
+            res.status(401).send({message: "Invalid token.", error: `${error}`});
+        }
+    }      
+  
 
 else{
-    const token = req.headers.authorization;
-    if (!token) {
-        return res.status(401).send({message: "Unauthorised."});
-    }
-    try {
-        const verified = jwt.verify(token.split(" ")[1], process.env.TOKEN_SECRET);
-        req.user = verified;
-        next();
-    } catch (error) {
-        res.status(401).send({message: "Invalid token.", error: `${error}`});
-    }
+    return next();
 }}
 
 const login = async (req, res, next) => {

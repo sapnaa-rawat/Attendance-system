@@ -29,17 +29,17 @@ router.post("/addtoproject", addtoproject.addUsertoProject);
 
 router.post('/change_Password', forget_password.change_Password); //Change PASSWORD
 
-router.post('/dailycheck', isnotweekend, checkAttendance.holiday, checkAttendance.attendance);
+router.post('/dailycheck', checkAttendance.holiday, checkAttendance.attendance);
 
-router.post('/markattendance', isnotweekend, Attendance.markAttendance);
+router.post('/markattendance', Attendance.markAttendance);
 
-router.post('/checkWeeklyAttendance',isnotweekend, weeklyAttendanceCheck.weeklyAttendance);
+router.post('/checkWeeklyAttendance', weeklyAttendanceCheck.weeklyAttendance);
 
 router.get('/missedattendance', missingdate.missingDates);
 
-router.post('/dailyleaves',  isnotweekend, leaves.getLeaveOnDate);
+router.post('/dailyleaves', leaves.getLeaveOnDate);
 
-router.post('/weeklyleaves', isnotweekend, leaves.dateIsMonday, leaves.getWeeklyLeaves);
+router.post('/weeklyleaves', leaves.dateIsMonday, leaves.getWeeklyLeaves);
 
 router.post('/monthlyleaves', leaves.getmonthlyLeaves);
 
