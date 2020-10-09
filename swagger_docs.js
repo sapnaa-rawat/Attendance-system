@@ -253,16 +253,28 @@ const docs = {
         "summary": "daily check",
         "operationId": "dailycheck",
         "parameters": [{
-          "name": "email",
+          "name": "Date",
           "in": "query",
+          
           "required": true,
           "style": "form",
           "explode": true,
           "schema": {
-            "$ref": "#/components/schemas/change_password"
-          }
+            "$ref": "#/components/schemas/dailycheck"
+          },
         }],
-        "responses": {
+        "responses": {  "200": {
+          "description": "Attendance"
+        },
+        "400": {
+          "description": "Invalid Details"
+        },
+        "401": {
+          "description": "Unauthorized"
+        },
+        "404": {
+          "description": "No such user."
+        },
           "405": {
             "description": "Invalid input"
           }
@@ -734,6 +746,24 @@ const docs = {
             "type": "string",
             "format": "password",
             "example": "admin"
+          }
+        }
+      },      
+      "dailycheck": {
+        "type": "object",
+        "required": [
+          "date",
+          "empid"
+          
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "22-aug-2020"
+          },
+          "empid": {
+            "type": "string",
+            "example": "1"
           }
         }
       },
