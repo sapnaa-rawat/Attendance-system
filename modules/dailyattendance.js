@@ -8,7 +8,6 @@ const constants=require('../modules/constants');
 const attendance = async (req, res, next) => {
     const {date, empid} = req.body;
     const now = moment(date, constants.constant_Data.DATE_FORMATE);
-    const week = now.day();
     try {
         const find = {
             project: true
@@ -16,9 +15,7 @@ const attendance = async (req, res, next) => {
         if (!!empid) {
             find.empid = empid;
         }
-        if (week == 0 || week == 6) {
-            res.status(200).json({message: "no data for saturday and sunday"});
-        } else {
+         else {
             find.date = date;
             const project = {
                 "_id": 1,

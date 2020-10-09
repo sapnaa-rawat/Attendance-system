@@ -12,7 +12,7 @@ const holidays = constants.constant_Data.HOLIDAYS_DATE;
  * @param {Number} days 
  */
 const getLeavesFrom = async (id, sdate, days) => {
-    const date_end = moment(sdate).add(parseInt(days), 'days').format(constants.constant_Data.DATE_FORMATE);
+    const date_end = moment(sdate).add(parseInt(days), 'days').format(constants.constant_Data.DATE_FORMAT);
     // search criteria for mongo query
     let filter = { date: { $gte: sdate, $lt: date_end, $nin: holidays }, "empattendance": { $in: leaves } };
     // if id not given, fetch data for all users involved in a project in the date range
@@ -40,20 +40,6 @@ const getLeavesFrom = async (id, sdate, days) => {
     return filtered_result;
 }
 
-const dateIsValid = (req, res, next) => {
-    const date = moment(req.body.date);
-    const week = date.day();
-    if (week == 0 || week == 6) {
-        return res.status(200).json({ message: "no data for saturday and sunday" });
-    }
-    else if (date.isValid()) {
-        next();
-    }
-    else {
-        return res.status(400).json({ message: "invalid Date" });
-    }
-}
-
 const dateIsMonday = (req, res, next) => {
     const date = moment(req.body.date);
     const week = date.day();
@@ -69,7 +55,7 @@ const getLeaveOnDate = async (req, res) => {
     const date = moment(req.body.date);
     const id = req.body.id;
     // Get leaves list for one day
-    const result = await getLeavesFrom(id, date.format(constants.constant_Data.DATE_FORMATE), 1);
+    const result = await getLeavesFrom(id, date.format(constants.constant_Data.DATE_FORMAT), 1);
     if (result.length === 0) {
         return res.status(404).json({ message: "No leaves record found" });
     }
@@ -82,7 +68,7 @@ const getWeeklyLeaves = async (req, res) => {
     const date = moment(req.body.date);
     const id = req.body.id;
     // Get leaves list for the week
-    const result = await getLeavesFrom(id, date.format(constants.constant_Data.DATE_FORMATE), 6);
+    const result = await getLeavesFrom(id, date.format(constants.constant_Data.DATE_FORMAT), 6);
     if (result.length === 0) {
         res.status(404).json({ message: "No leaves record found" });
     }
@@ -104,7 +90,7 @@ const getmonthlyLeaves = async (req, res) => {
     // days in month
     const days = sdate.daysInMonth();
     // get leaves for the month
-    const result = await getLeavesFrom(id, sdate.format(constants.constant_Data.DATE_FORMATE), days - 1);
+    const result = await getLeavesFrom(id, sdate.format(constants.constant_Data.DATE_FORMAT), days - 1);
     if (result.length === 0) {
         res.status(404).json({ message: "No leaves record found" });
     }
@@ -113,4 +99,4 @@ const getmonthlyLeaves = async (req, res) => {
     }
 }
 
-module.exports = { getLeaveOnDate, getWeeklyLeaves, getmonthlyLeaves, dateIsValid, dateIsMonday };
+module.exports = { getLeaveOnDate, getWeeklyLeaves, getmonthlyLeaves, dateIsMonday };

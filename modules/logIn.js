@@ -2,6 +2,7 @@ const resource = require('../model/resource');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const contants = require('./constants');
 
 const generateSecret = async () => {
     const randomSecret = await crypto.randomBytes(32).toString('hex');
@@ -11,7 +12,10 @@ const generateSecret = async () => {
 
 //finds all employees involved in a project
 const findEmpInProject = async () => {
-    const empsAllDetails = await resource.find({project: true, deleted: false});
+    const empsAllDetails = await resource.find({
+        project: true,
+        deleted: false
+    });
     const emps = await empsAllDetails.map((value, index) => {
         return {
             name: value.name,
@@ -25,39 +29,56 @@ const findEmpInProject = async () => {
 }
 
 const validateToken = (req, res, next) => {
-   console.log(req.path);
 
-    if ( req.path == '/api/v1/deleteuser'|| req.path=='/api/v1/addtoproject'|| req.path == '/api/v1/change_Password'|| req.path == '/api/v1/dailycheck'|| req.path == '/api/v1/markattendance'|| req.path == '/api/v1/checkWeeklyAttendance'|| req.path == '/api/v1/missedattendance'|| req.path == '/api/v1/dailyleaves'|| req.path == '/api/v1/weeklyleaves'|| req.path=='/api/v1/monthlyleaves'|| req.path=='/api/v1/mandatoryholiday') 
-    {
+    const {
+        path
+    } = req;
+    const pathArr = path.split('/');
+    const endPoint = pathArr[pathArr.length - 1];
+    if (contants.constant_Data.IGNORE_URL.indexOf(endPoint) > -1) {
+        next();
+    } else {
         const token = req.headers.authorization;
         if (!token) {
-            return res.status(401).send({message: "Unauthorised."});
+            return res.status(401).send({
+                message: "Unauthorised."
+            });
         }
         try {
             const verified = jwt.verify(token.split(" ")[1], process.env.TOKEN_SECRET);
             req.user = verified;
             next();
         } catch (error) {
-            res.status(401).send({message: "Invalid token.", error: `${error}`});
+            res.status(401).send({
+                message: "Invalid token.",
+                error: `${error}`
+            });
         }
-    }      
-  
+    }
+}
 
-else{
-    return next();
-}}
+
 
 const login = async (req, res, next) => {
-    const {email, password} = req.body;
+    const {
+        email,
+        password
+    } = req.body;
     // null check
     if (email.length === 0) {
-        return res.status(400).json({message: "Please provide an email."});
+        return res.status(400).json({
+            message: "Please provide an email."
+        });
     }
     if (password.length === 0) {
-        return res.status(400).json({message: "Please provide a password."});
+        return res.status(400).json({
+            message: "Please provide a password."
+        });
     }
     try {
-        const user = await resource.findOne({email: email});
+        const user = await resource.findOne({
+            email: email
+        });
         const match = user && await bcrypt.compare(password, user.password);
 
         if (match) {
@@ -67,7 +88,9 @@ const login = async (req, res, next) => {
             const token = jwt.sign({
                 id: user.id,
                 email: user.email
-            }, process.env.TOKEN_SECRET, {expiresIn: '90 days'});
+            }, process.env.TOKEN_SECRET, {
+                expiresIn: '90 days'
+            });
             //Get employees in a project
             let empsInProject = await findEmpInProject();
             if (empsInProject.length === 0) {
@@ -82,8 +105,13 @@ const login = async (req, res, next) => {
             throw Error();
         }
     } catch (err) {
-        res.status(404).send({message: "Invalid username/password"});
+        res.status(404).send({
+            message: "Invalid username/password"
+        });
     }
 }
 
-module.exports = {validateToken, login};
+module.exports = {
+    validateToken,
+    login
+};

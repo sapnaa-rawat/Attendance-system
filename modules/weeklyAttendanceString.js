@@ -5,10 +5,10 @@ const constants=require('../modules/constants');
 
 const weeklyAttendance = async (req, res, next) => {
     const id = req.body.id;
-    const dateforsearch = moment(req.body.date).format(constants.constant_Data.DATE_FORMATE);
+    const dateforsearch = moment(req.body.date).format(constants.constant_Data.DATE_FORMAT);
     // ******** Getting rid of loop ******** //
     // end date is non inclusive (because of using $lt and not $lte), so add 6 instead of 5
-    const enddate = moment(dateforsearch).add(6, 'days').format(constants.constant_Data.DATE_FORMATE);
+    const enddate = moment(dateforsearch).add(6, 'days').format(constants.constant_Data.DATE_FORMAT);
     const project = {
         "_id": 1,
         "date": 1,

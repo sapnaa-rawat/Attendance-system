@@ -14,6 +14,8 @@ module.exports = {
         FORGET_BODY_MAIL : (name, password) => {
             return `Hi ${name},<br><br> Here is the new password- <b>${password}</b><br><br>If password reset wasn’t intended: If you didn't make the request, just ignore this email.<br><br>Thanks <br><br>`
         },
-        DATE_FORMATE:'DD-MMM-YYYY',
+        DATE_FORMAT:'DD-MMM-YYYY',
+        IGNORE_URL: ['register', 'holidays', 'login', 'forgot_Password', 'apidocs'],
+        ACCEPTED_URL_FOR_WEEKEND: ['dailycheck','markattendance','checkWeeklyAttendance','dailyleaves','weeklyleaves']
     }
 }
