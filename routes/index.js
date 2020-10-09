@@ -11,7 +11,7 @@ const deleteuser = require("../modules/deleteApi");
 const addtoproject = require("../modules/projectApi");
 const leaves = require('../modules/leaves');
 const show_Holidays = require('../modules/mandatoryholiday');
-const isnotweekend=require('../modules/middleware');
+
 
 router.post('/register', register.validate, register.resourceExists, register.register); // Register new resource API
 

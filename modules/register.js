@@ -3,8 +3,6 @@ const validator = require("email-validator");
 const bcrypt = require('bcrypt');
 const constants=require("../modules/constants");
 
-const saltRounds = constants.constant_Data.SALTROUNDS;
-
 const validate = (req, res, next) => {
     const { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
@@ -70,7 +68,7 @@ const register = async (req, res, next) => {
     const { name, email, phoneNumber, skype, designation, technology, id, password, project } = req.body;
     try {
         //hash the password
-        const hashPass = await bcrypt.hash(password, saltRounds);
+        const hashPass = await bcrypt.hash(password, constants.constant_Data.SALTROUNDS);
         //get the date in the required format
         // const date = moment(new Date).format("DD-MMM-YYYY");
         const date = new Date();

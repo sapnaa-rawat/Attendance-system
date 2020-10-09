@@ -1,7 +1,4 @@
-const moment = require('moment');
 const attendances = require('../model/attendance');
-const constants=require('../modules/constants');
-
 
 const markAttendance = async (req, res) => {
   const body = req.body;

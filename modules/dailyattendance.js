@@ -8,7 +8,6 @@ const constants=require('../modules/constants');
 const attendance = async (req, res, next) => {
     const {date, empid} = req.body;
     const now = moment(date, constants.constant_Data.DATE_FORMATE);
-    const week = now.day();
     try {
         const find = {
             project: true
