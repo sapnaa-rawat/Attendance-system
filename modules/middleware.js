@@ -11,7 +11,6 @@ const dateIsValid = (req, res, next) => {
     const endPoints = pathArr[pathArr.length - 1];
     if (constants.constant_Data.ACCEPTED_URL_FOR_WEEKEND.indexOf(endPoints) > -1) {
         const bodydata = req.body;
-        console.log(bodydata.length)
         if (bodydata.length > 1) {
             bodydata.map((item, index) => {
                 const date = moment(item.date) //.format(constants.constant_Data.DATE_FORMAT);
