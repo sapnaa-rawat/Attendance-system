@@ -44,7 +44,7 @@ const weeklyAttendance = async (req, res, next) => {
             $sort: {date: 1}
         }
     ]);
-
+    console.log(userdata);
     if (userdata.length === 0) {
         return res.status(200).json({message: "attendance not marked for this week"});
     }
